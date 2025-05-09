@@ -16,6 +16,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF7F6F2), //  background
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -31,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
                   width: 200,
                   decoration: const BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage('assets/logo.png'), // Add your logo to assets
+                      image: AssetImage('assets/ServTech.png'), // Add your logo to assets
                       fit: BoxFit.contain,
                     ),
                   ),

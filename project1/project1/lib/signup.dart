@@ -18,6 +18,7 @@ class _SignupPageState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF7F6F2), // Light blue background
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -32,7 +33,7 @@ class _SignupPageState extends State<SignupPage> {
                   width: 200,
                   decoration: const BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage('assets/logo.png'),
+                      image: AssetImage('assets/ServTech.png'),
                       fit: BoxFit.contain,
                     ),
                   ),
