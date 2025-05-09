@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'homepage.dart';
 import 'jobs.dart';
 import 'sell.dart';
+import 'login.dart';
+import 'signup.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,7 +15,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Three Page App',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: MainPage(),
+      home: LoginPage(),
+      routes: {
+        '/signup': (context) => const SignupPage(),
+        '/main': (context) => const MainPage(),
+      },
     );
   }
 }
