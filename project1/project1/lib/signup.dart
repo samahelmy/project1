@@ -104,7 +104,7 @@ class _SignupPageState extends State<SignupPage> {
                     if (_formKey.currentState!.validate()) {
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (context) => const HomePage()),
+                        MaterialPageRoute(builder: (context) => const homepage()),
                       );
                     }
                   },
