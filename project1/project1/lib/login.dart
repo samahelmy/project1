@@ -22,7 +22,7 @@ class _LoginPageState extends State<LoginPage> {
           children: [
             Container(
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.5,  // Increased from 0.4 to 0.5
+              height: MediaQuery.of(context).size.height * 0.5,
               decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage('assets/ServTech.png'),
@@ -35,6 +35,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Form(
                 key: _formKey,
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Evenly space elements
                   children: [
                     TextFormField(
                       controller: _emailController,
