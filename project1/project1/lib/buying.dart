@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'sellres.dart';
 
 class Buying extends StatelessWidget {
-  const Buying({Key? key}) : super(key: key);
+  const Buying({super.key});
 
   @override
   Widget build(BuildContext context) {
