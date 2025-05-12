@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SellRes extends StatelessWidget {
-  const SellRes({Key? key}) : super(key: key);
+  const SellRes({super.key});
 
   @override
   Widget build(BuildContext context) {

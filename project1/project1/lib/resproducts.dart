@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ResProducts extends StatelessWidget {
-  const ResProducts({Key? key}) : super(key: key);
+  const ResProducts({super.key});
 
   @override
   Widget build(BuildContext context) {

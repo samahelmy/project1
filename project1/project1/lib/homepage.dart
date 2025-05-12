@@ -6,7 +6,7 @@ import 'package:project1/resproducts.dart';
 import 'package:project1/rate.dart';
 
 class homepage extends StatefulWidget {
-  const homepage({Key? key}) : super(key: key);
+  const homepage({super.key});
 
   @override
   State<homepage> createState() => _homepageState();
