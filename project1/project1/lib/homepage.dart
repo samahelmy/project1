@@ -65,22 +65,22 @@ class _homepageState extends State<homepage> {
   Widget _buildClickableContainer(String text, {bool isWide = false}) {
     return InkWell(
       onTap: () {
-        if (text == 'jobs') {
+        if (text == 'التوظيف') {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const Jobs()),
           );
-        } else if (text == 'Buy Products') {
+        } else if (text == 'بيع وشراء وتأجير المطاعم') {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const Buying()),
           );
-        } else if (text == 'resproducts') {
+        } else if (text == 'شراء وتأجير معدات الطعام') {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const ResProducts()),
           );
-        } else if (text == 'Rate') {
+        } else if (text == 'التقييم') {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const Rate()),
@@ -115,7 +115,7 @@ class _homepageState extends State<homepage> {
                   ),
                   const SizedBox(width: 10),
                   Text(
-                    text,
+                   "التواصل مع الادارة",
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
