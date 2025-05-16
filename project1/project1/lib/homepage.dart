@@ -12,14 +12,6 @@ class homepage extends StatefulWidget {
   State<homepage> createState() => _homepageState();
 }
 
-int _currentIndex = 0;
-
-final List<Widget> _pages = [
-  const Center(child: Text('Home Page')),
-  const Jobs(key: Key('jobs')),
-  const Sell(key: Key('sell')),
-];
-
 class _homepageState extends State<homepage> {
   @override
   Widget build(BuildContext context) {
@@ -47,8 +39,8 @@ class _homepageState extends State<homepage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildClickableContainer('Container 1'),
-                  _buildClickableContainer('Container 2'),
+                  _buildClickableContainer('Find Services'),
+                  _buildClickableContainer('Buy Products'),
                 ],
               ),
               const SizedBox(height: 20),
@@ -56,27 +48,16 @@ class _homepageState extends State<homepage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildClickableContainer('Container 3'),
-                  _buildClickableContainer('Container 4'),
+                  _buildClickableContainer('Our Packages'),
+                  _buildClickableContainer('Rate Services'),
                 ],
               ),
               const SizedBox(height: 20),
               // Bottom container
-              _buildClickableContainer('Bottom Container', isWide: true),
-              // Add extra padding at bottom to prevent content from being hidden by nav bar
-              const SizedBox(height: 70),
+              _buildClickableContainer('Contact Us', isWide: true),
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (index) => setState(() => _currentIndex = index),
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.work), label: 'Jobs'),
-          BottomNavigationBarItem(icon: Icon(Icons.sell), label: 'Sell'),
-        ],
       ),
     );
   }
@@ -84,22 +65,22 @@ class _homepageState extends State<homepage> {
   Widget _buildClickableContainer(String text, {bool isWide = false}) {
     return InkWell(
       onTap: () {
-        if (text == 'Container 1') {
+        if (text == 'jobs') {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const Jobs()),
           );
-        } else if (text == 'Container 2') {
+        } else if (text == 'Buy Products') {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const Buying()),
           );
-        } else if (text == 'Container 3') {
+        } else if (text == 'resproducts') {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const ResProducts()),
           );
-        } else if (text == 'Container 4') {
+        } else if (text == 'Rate') {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const Rate()),
@@ -128,9 +109,9 @@ class _homepageState extends State<homepage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(
-                    Icons.help_outline,  // Changed icon for bottom container
+                    Icons.chat_outlined,  // Changed icon for bottom container
                     size: 30,
-                    color: Colors.blue,
+                    color: const Color(0xffc29424), // Updated color
                   ),
                   const SizedBox(width: 10),
                   Text(
@@ -148,7 +129,7 @@ class _homepageState extends State<homepage> {
                   Icon(
                     _getIconForContainer(text),
                     size: 50,
-                    color: Colors.blue,
+                    color: const Color(0xffc29424), // Updated color
                   ),
                   const SizedBox(height: 15),
                   Text(
@@ -166,14 +147,14 @@ class _homepageState extends State<homepage> {
 
   IconData _getIconForContainer(String text) {
     switch (text) {
-      case 'Container 1':
-        return Icons.handyman;
-      case 'Container 2':
-        return Icons.engineering;
-      case 'Container 3':
-        return Icons.home_repair_service;
-      case 'Container 4':
-        return Icons.build;
+      case 'Find Services':
+        return Icons.person_add_sharp;
+      case 'Buy Products':
+        return Icons.store;
+      case 'Our Packages':
+        return Icons.room_service_rounded;
+      case 'Rate Services':
+        return Icons.star_rounded;
       default:
         return Icons.error;
     }
