@@ -55,7 +55,7 @@ class _SignupPageState extends State<SignupPage> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
-                          borderSide: const BorderSide(color: Colors.blue, width: 2),
+                          borderSide: const BorderSide(color: Colors.grey, width: 1),
                         ),
                       ),
                       validator: (value) {
@@ -83,7 +83,7 @@ class _SignupPageState extends State<SignupPage> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
-                          borderSide: const BorderSide(color: Colors.blue, width: 2),
+                          borderSide: const BorderSide(color: Colors.grey, width: 1),
                         ),
                       ),
                       validator: (value) {
@@ -111,7 +111,7 @@ class _SignupPageState extends State<SignupPage> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
-                          borderSide: const BorderSide(color: Colors.blue, width: 2),
+                          borderSide: const BorderSide(color: Colors.grey, width: 1),
                         ),
                       ),
                       obscureText: true,
@@ -140,7 +140,7 @@ class _SignupPageState extends State<SignupPage> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
-                          borderSide: const BorderSide(color: Colors.blue, width: 2),
+                          borderSide: const BorderSide(color: Colors.grey, width: 1),
                         ),
                       ),
                       obscureText: true,
