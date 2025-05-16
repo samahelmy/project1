@@ -14,7 +14,7 @@ class Buying extends StatelessWidget {
             width: MediaQuery.of(context).size.width,
             height: 180,  // Increased from 120
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: const Color(0xffc29424),  // Changed to golden color
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.2),
@@ -28,10 +28,11 @@ class Buying extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.only(top: 60),  // Increased from 40
                 child: Text(
-                  'Buy Products',
+                  'بيع وشراء وتأجير المطعم',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
+                    color: Colors.white,  // Changed to white
                   ),
                 ),
               ),
@@ -51,7 +52,7 @@ class Buying extends StatelessWidget {
                 width: MediaQuery.of(context).size.width * 0.7,  // Changed from double.infinity to 70% of screen width
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: const Color(0xffc29424),  // Changed to golden color
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
                     BoxShadow(
@@ -62,13 +63,28 @@ class Buying extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: const Text(
-                  'Click me to continue',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                child: const Center(
+                  child: Text(
+                    'اضافة مطعم للبيع',
+                    textAlign: TextAlign.right, // Add text alignment
+                    textDirection: TextDirection.rtl, // Add text direction for RTL
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 20.0, top: 30.0),
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                "مطاعم للبيع",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
           ),

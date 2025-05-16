@@ -14,7 +14,7 @@ class Jobs extends StatelessWidget {
             width: MediaQuery.of(context).size.width * 0.8, // Added width
             padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15), // Increased padding
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: const Color(0xff184c6b), // Changed to blue color
               borderRadius: BorderRadius.circular(15),
               boxShadow: [
                 BoxShadow(
@@ -27,10 +27,11 @@ class Jobs extends StatelessWidget {
             ),
             child: const Center( // Added Center widget
               child: Text(
-                'Available Jobs',
+                'وظائف شاغرة',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
+                  color: Colors.white, // Keeping text white
                 ),
               ),
             ),

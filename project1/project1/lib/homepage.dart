@@ -39,8 +39,8 @@ class _homepageState extends State<homepage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildClickableContainer('Find Services'),
-                  _buildClickableContainer('Buy Products'),
+                  _buildClickableContainer('التوظيف'),
+                  _buildClickableContainer('بيع وشراء وتأجير المطاعم'),
                 ],
               ),
               const SizedBox(height: 20),
@@ -48,8 +48,8 @@ class _homepageState extends State<homepage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildClickableContainer('Our Packages'),
-                  _buildClickableContainer('Rate Services'),
+                  _buildClickableContainer('شراء وتأجير معدات الطعام'),
+                  _buildClickableContainer('التقييم'),
                 ],
               ),
               const SizedBox(height: 20),
@@ -124,19 +124,30 @@ class _homepageState extends State<homepage> {
                 ],
               )
             : Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    _getIconForContainer(text),
-                    size: 50,
-                    color: const Color(0xffc29424), // Updated color
+                  Expanded(
+                    flex: 3, // Takes 60% of container height
+                    child: Center(
+                      child: Icon(
+                        _getIconForContainer(text),
+                        size: 80, // Increased from 65
+                        color: const Color(0xffc29424),
+                      ),
+                    ),
                   ),
-                  const SizedBox(height: 15),
-                  Text(
-                    text,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                  Expanded(
+                    flex: 2, // Takes 40% of container height
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(
+                        text,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 18, // Increased from 15
+                          height: 1.2,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
                 ],
@@ -147,13 +158,13 @@ class _homepageState extends State<homepage> {
 
   IconData _getIconForContainer(String text) {
     switch (text) {
-      case 'Find Services':
+      case 'التوظيف':
         return Icons.person_add_sharp;
-      case 'Buy Products':
+      case 'بيع وشراء وتأجير المطاعم':
         return Icons.store;
-      case 'Our Packages':
+      case 'شراء وتأجير معدات الطعام':
         return Icons.room_service_rounded;
-      case 'Rate Services':
+      case 'التقييم':
         return Icons.star_rounded;
       default:
         return Icons.error;
