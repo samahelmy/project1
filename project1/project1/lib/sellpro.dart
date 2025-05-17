@@ -12,12 +12,12 @@ class SellPro extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 40),
+            const SizedBox(height: 30),
             const Center(
               child: Text(
                 'اضافة منتج',
                 style: TextStyle(
-                  fontSize: 45, // Increased from 35
+                  fontSize: 45,
                   fontWeight: FontWeight.bold,
                   color: Color(0xff184c6b),
                 ),
@@ -26,10 +26,10 @@ class SellPro extends StatelessWidget {
             const SizedBox(height: 20),
             Expanded(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.start, // Changed from spaceEvenly
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'اسم المنتج',
                     style: TextStyle(
                       fontSize: 20,
@@ -37,8 +37,10 @@ class SellPro extends StatelessWidget {
                       color: Color(0xff184c6b),
                     ),
                   ),
+                  const SizedBox(height: 8),
                   buildFormField('اسم المنتج'),
-                  Text(
+                  const SizedBox(height: 15),
+                  const Text(
                     'السعر',
                     style: TextStyle(
                       fontSize: 20,
@@ -46,6 +48,7 @@ class SellPro extends StatelessWidget {
                       color: Color(0xff184c6b),
                     ),
                   ),
+                  const SizedBox(height: 8),
                   buildFormField('السعر'),
                 ],
               ),
@@ -77,11 +80,11 @@ class SellPro extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 15),
                 const Text(
                   'ServTech',
                   style: TextStyle(
-                    fontSize: 45, // Increased from 35
+                    fontSize: 45,
                     fontWeight: FontWeight.bold,
                     color: Color(0xff184c6b),
                   ),
