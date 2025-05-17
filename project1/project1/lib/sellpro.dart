@@ -60,26 +60,59 @@ class SellPro extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 buildFormField('السعر'),
-                const SizedBox(height: 30),
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Add your click handling here
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xffc29424),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
+                const SizedBox(height: 20),
+                const Text(
+                  'الوصف',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xff184c6b),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                TextFormField(
+                  maxLines: 4, // Makes the field taller
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.grey[200],
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: const BorderSide(color: Colors.grey, width: 1),
                     ),
-                    child: const Text(
-                      'اضافة',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: const BorderSide(color: Colors.grey, width: 1),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: const BorderSide(color: Colors.grey, width: 1),
+                    ),
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+                  ),
+                ),
+                const SizedBox(height: 30),
+                Center(
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Add your click handling here
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xffc29424),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                      ),
+                      child: const Text(
+                        'اضافة',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
