@@ -7,93 +7,100 @@ class SellRes extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF7F6F2),
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Color(0xff184c6b)),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 40),
-            // Title
-            const Center(
-              child: Text(
-                'اضافة مطعم',
-                style: TextStyle(
-                  fontSize: 35,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xff184c6b),
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            // Form fields wrapped in Expanded
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Restaurant name field
-                  buildFormField('اسم المطعم'),
-                  // Price field
-                  buildFormField('السعر'),
-                  // Location field
-                  buildFormField('الموقع'),
-                  // Description field (larger)
-                  buildFormField('الوصف', maxLines: 5),
-                ],
-              ),
-            ),
-            // Bottom section
-            Column(
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Add button
-                Center(
-                  child: InkWell(
-                    onTap: () {
-                      // Add your click handling here
-                    },
-                    child: Container(
-                      width: double.infinity, // Changed to take full width
-                      padding: const EdgeInsets.symmetric(vertical: 12), // Reduced from 15
-                      decoration: BoxDecoration(
-                        color: const Color(0xffc29424),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          'اضافة',
-                          style: TextStyle(
-                            fontSize: 20, // Reduced from 25
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
+                const SizedBox(height: 40),
+                // Title
+                const Center(
+                  child: Text(
+                    'اضافة مطعم',
+                    style: TextStyle(
+                      fontSize: 35,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xff184c6b),
                     ),
                   ),
                 ),
                 const SizedBox(height: 20),
-                // ServTech text
-                const Text(
-                  'ServTech',
-                  style: TextStyle(
-                    fontSize: 50, // Reduced from 50
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xff184c6b),
+                // Form fields wrapped in Expanded
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Restaurant name field
+                      buildFormField('اسم المطعم'),
+                      // Price field
+                      buildFormField('السعر'),
+                      // Location field
+                      buildFormField('الموقع'),
+                      // Description field (larger)
+                      buildFormField('الوصف', maxLines: 5),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 20),
+                // Bottom section
+                Column(
+                  children: [
+                    // Add button
+                    Center(
+                      child: InkWell(
+                        onTap: () {
+                          // Add your click handling here
+                        },
+                        child: Container(
+                          width: double.infinity, // Changed to take full width
+                          padding: const EdgeInsets.symmetric(vertical: 12), // Reduced from 15
+                          decoration: BoxDecoration(
+                            color: const Color(0xffc29424),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: const Center(
+                            child: Text(
+                              'اضافة',
+                              style: TextStyle(
+                                fontSize: 20, // Reduced from 25
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    // ServTech text
+                    const Text(
+                      'ServTech',
+                      style: TextStyle(
+                        fontSize: 50, // Reduced from 50
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xff184c6b),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                  ],
+                ),
               ],
             ),
-          ],
-        ),
+          ),
+          Positioned(
+            top: 40,
+            left: 20,
+            child: IconButton(
+              icon: const Icon(
+                Icons.arrow_back_ios,
+                color: Color(0xff184c6b),
+              ),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ),
+        ],
       ),
     );
   }

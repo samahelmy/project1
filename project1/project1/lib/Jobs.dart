@@ -9,10 +9,24 @@ class Jobs extends StatelessWidget {
       backgroundColor: const Color(0xFFF7F6F2),
       body: Column(
         children: [
-          const SizedBox(height: 50),
+          Padding(
+            padding: const EdgeInsets.only(top: 40, left: 20),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: IconButton(
+                icon: const Icon(
+                  Icons.arrow_back_ios,
+                  color: Color(0xff184c6b),
+                ),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
           Container(
             width: MediaQuery.of(context).size.width * 0.8, // Added width
-            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15), // Increased padding
+            padding: const EdgeInsets.symmetric(
+                horizontal: 30, vertical: 15), // Increased padding
             decoration: BoxDecoration(
               color: const Color(0xff184c6b), // Changed to blue color
               borderRadius: BorderRadius.circular(15),
@@ -72,7 +86,8 @@ class Jobs extends StatelessWidget {
                                 bottomLeft: Radius.circular(10),
                               ),
                               image: DecorationImage(
-                                image: AssetImage('assets/job${index + 1}.png'), // Add your job images
+                                image: AssetImage(
+                                    'assets/job${index + 1}.png'), // Add your job images
                                 fit: BoxFit.cover,
                               ),
                             ),

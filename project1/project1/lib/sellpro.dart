@@ -7,93 +7,98 @@ class SellPro extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF7F6F2),
-      body: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 30),
-            const Center(
-              child: Text(
-                'اضافة منتج',
-                style: TextStyle(
-                  fontSize: 45,
-                  fontWeight: FontWeight.bold,
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 40, left: 20),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: IconButton(
+                icon: const Icon(
+                  Icons.arrow_back_ios,
                   color: Color(0xff184c6b),
                 ),
+                onPressed: () => Navigator.pop(context),
               ),
             ),
-            const SizedBox(height: 20),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start, // Changed from spaceEvenly
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'اسم المنتج',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xff184c6b),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  buildFormField('اسم المنتج'),
-                  const SizedBox(height: 15),
-                  const Text(
-                    'السعر',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xff184c6b),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  buildFormField('السعر'),
-                ],
+          ),
+          const SizedBox(height: 10),
+          const Center(
+            child: Text(
+              'اضافة منتج',
+              style: TextStyle(
+                fontSize: 45,
+                fontWeight: FontWeight.bold,
+                color: Color(0xff184c6b),
               ),
             ),
-            Column(
+          ),
+          const SizedBox(height: 30),
+          Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Center(
-                  child: InkWell(
-                    onTap: () {
-                      // Add your click handling here
-                    },
-                    child: Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      decoration: BoxDecoration(
-                        color: const Color(0xffc29424),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          'اضافة',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 15),
                 const Text(
-                  'ServTech',
+                  'اسم المنتج',
                   style: TextStyle(
-                    fontSize: 45,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Color(0xff184c6b),
                   ),
                 ),
+                const SizedBox(height: 8),
+                buildFormField('اسم المنتج'),
                 const SizedBox(height: 20),
+                const Text(
+                  'السعر',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xff184c6b),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                buildFormField('السعر'),
+                const SizedBox(height: 30),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Add your click handling here
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xffc29424),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
+                    child: const Text(
+                      'اضافة',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                const Center(
+                  child: Text(
+                    'ServTech',
+                    style: TextStyle(
+                      fontSize: 35,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xff184c6b),
+                    ),
+                  ),
+                ),
               ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

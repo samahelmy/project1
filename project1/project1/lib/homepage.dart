@@ -4,6 +4,7 @@ import 'package:project1/Sell.dart';
 import 'package:project1/buying.dart';
 import 'package:project1/resproducts.dart';
 import 'package:project1/rate.dart';
+import 'profile.dart';
 
 class homepage extends StatefulWidget {
   const homepage({super.key});
@@ -17,47 +18,86 @@ class _homepageState extends State<homepage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF7F6F2),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            children: [
-              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-              // Logo
-              Container(
-                height: 250,  // Increased from 150
-                width: 250,   // Increased from 150
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/ServTech.png'),
-                    fit: BoxFit.contain,
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                children: [
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                  // Logo
+                  Container(
+                    height: 250,  // Increased from 150
+                    width: 250,   // Increased from 150
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage('assets/ServTech.png'),
+                        fit: BoxFit.contain,
+                      ),
+                    ),
                   ),
+                  const SizedBox(height: 40),
+                  // First row of containers
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _buildClickableContainer('التوظيف'),
+                      _buildClickableContainer('بيع وشراء وتأجير المطاعم'),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  // Second row of containers
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _buildClickableContainer('شراء وتأجير معدات الطعام'),
+                      _buildClickableContainer('التقييم'),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  // Bottom container
+                  _buildClickableContainer('Contact Us', isWide: true),
+                ],
+              ),
+            ),
+          ),
+          // Left logout button
+          Positioned(
+            top: 40,
+            left: 20,
+            child: IconButton(
+              icon: const Icon(
+                Icons.logout,
+                color: Color(0xff184c6b),
+              ),
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/');
+              },
+            ),
+          ),
+          // Right settings button
+          Positioned(
+            top: 40,
+            right: 20,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ProfilePage()),
+                );
+              },
+              child: CircleAvatar(
+                radius: 20,
+                backgroundColor: Colors.white,
+                child: const Icon(
+                  Icons.person,
+                  color: Color(0xff184c6b),
                 ),
               ),
-              const SizedBox(height: 40),
-              // First row of containers
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _buildClickableContainer('التوظيف'),
-                  _buildClickableContainer('بيع وشراء وتأجير المطاعم'),
-                ],
-              ),
-              const SizedBox(height: 20),
-              // Second row of containers
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _buildClickableContainer('شراء وتأجير معدات الطعام'),
-                  _buildClickableContainer('التقييم'),
-                ],
-              ),
-              const SizedBox(height: 20),
-              // Bottom container
-              _buildClickableContainer('Contact Us', isWide: true),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
