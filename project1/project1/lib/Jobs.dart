@@ -87,7 +87,7 @@ class Jobs extends StatelessWidget {
                               ),
                               image: DecorationImage(
                                 image: AssetImage(
-                                    'assets/job${index + 1}.png'), // Add your job images
+                                    'assets/ServTech.png'), // Add your job images
                                 fit: BoxFit.cover,
                               ),
                             ),
