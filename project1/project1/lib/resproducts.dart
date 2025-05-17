@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project1/sellpro.dart';
 
 class ResProducts extends StatelessWidget {
   const ResProducts({super.key});
@@ -42,7 +43,10 @@ class ResProducts extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: InkWell(
               onTap: () {
-                // Add your click handling here
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SellPro()),
+                );
               },
               child: Container(
                 width: double.infinity,
