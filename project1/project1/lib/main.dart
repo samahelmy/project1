@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'homepage.dart';
-import 'jobs.dart';
-import 'sell.dart';
 import 'login.dart';
 import 'signup.dart';
 

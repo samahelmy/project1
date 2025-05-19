@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:project1/Jobs.dart';
-import 'package:project1/Sell.dart';
 import 'package:project1/buying.dart';
 import 'package:project1/resproducts.dart';
 import 'package:project1/rate.dart';

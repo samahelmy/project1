@@ -102,7 +102,7 @@ class Rate extends StatelessWidget {
                                     ),
                                     const SizedBox(width: 8),
                                     Text(
-                                      '${(4 + index % 2).toStringAsFixed(1)}',
+                                      (4 + index % 2).toStringAsFixed(1),
                                       style: const TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold,
