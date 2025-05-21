@@ -12,53 +12,135 @@ class ProfilePage extends StatelessWidget {
           Column(
             children: [
               const SizedBox(height: 60),
-              // Profile Header
-              Center(
+              // Profile Avatar and Name Section
+              const CircleAvatar(
+                radius: 50,
+                backgroundColor: Colors.white,
+                child: Icon(
+                  Icons.person,
+                  size: 50,
+                  color: Color(0xff184c6b),
+                ),
+              ),
+              const SizedBox(height: 30),
+              // User Info Containers
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   children: [
-                    const CircleAvatar(
-                      radius: 50,
-                      backgroundColor: Colors.white,
-                      child: Icon(
-                        Icons.person,
-                        size: 50,
-                        color: Color(0xff184c6b),
+                    // First Name Container
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.1),
+                            spreadRadius: 1,
+                            blurRadius: 3,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: const Text(
+                        'First Name', // Will be replaced with actual first name
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xff184c6b),
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    const Text(
-                      'User Name',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xff184c6b),
+                    const SizedBox(height: 15),
+                    // Rest of Name Container
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.1),
+                            spreadRadius: 1,
+                            blurRadius: 3,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: const Text(
+                        'Rest of Name', // Will be replaced with actual rest of name
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xff184c6b),
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 10),
-                    Text(
-                      'user@email.com',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.grey[600],
+                    const SizedBox(height: 15),
+                    // Email Container
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.1),
+                            spreadRadius: 1,
+                            blurRadius: 3,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: const Text(
+                        'user@email.com', // Will be replaced with actual email
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xff184c6b),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 15),
+                    // Phone Number Container with TextFormField
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.1),
+                            spreadRadius: 1,
+                            blurRadius: 3,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          hintText: 'Enter Phone Number',
+                          border: InputBorder.none,
+                          hintStyle: TextStyle(
+                            color: Colors.grey,
+                          ),
+                        ),
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Color(0xff184c6b),
+                        ),
+                        keyboardType: TextInputType.phone,
                       ),
                     ),
                   ],
                 ),
               ),
               const SizedBox(height: 40),
-              // Profile Options
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  children: [
-                    buildProfileOption(Icons.person_outline, 'Edit Profile'),
-                    const SizedBox(height: 15),
-                    buildProfileOption(Icons.settings, 'Settings'),
-                    const SizedBox(height: 15),
-                    buildProfileOption(Icons.help_outline, 'Help Center'),
-                  ],
-                ),
-              ),
             ],
           ),
           Positioned(
@@ -71,47 +153,6 @@ class ProfilePage extends StatelessWidget {
               ),
               onPressed: () => Navigator.pop(context),
             ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget buildProfileOption(IconData icon, String title) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 3,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Icon(
-            icon,
-            color: const Color(0xff184c6b),
-            size: 24,
-          ),
-          const SizedBox(width: 15),
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          const Spacer(),
-          const Icon(
-            Icons.arrow_forward_ios,
-            color: Color(0xff184c6b),
-            size: 16,
           ),
         ],
       ),
