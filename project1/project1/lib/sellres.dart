@@ -1,7 +1,18 @@
 import 'package:flutter/material.dart';
+import 'models/restaurant.dart';
 
-class SellRes extends StatelessWidget {
+class SellRes extends StatefulWidget {
   const SellRes({super.key});
+
+  @override
+  State<SellRes> createState() => _SellResState();
+}
+
+class _SellResState extends State<SellRes> {
+  final _nameController = TextEditingController();
+  final _priceController = TextEditingController();
+  final _locationController = TextEditingController();
+  final _descriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -34,13 +45,13 @@ class SellRes extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Restaurant name field
-                      buildFormField('اسم المطعم'),
+                      buildFormField('اسم المطعم', _nameController),
                       // Price field
-                      buildFormField('السعر'),
+                      buildFormField('السعر', _priceController),
                       // Location field
-                      buildFormField('الموقع'),
+                      buildFormField('الموقع', _locationController),
                       // Description field (larger)
-                      buildFormField('الوصف', maxLines: 5),
+                      buildFormField('الوصف', _descriptionController, maxLines: 5),
                     ],
                   ),
                 ),
@@ -51,11 +62,23 @@ class SellRes extends StatelessWidget {
                     Center(
                       child: InkWell(
                         onTap: () {
-                          // Add your click handling here
+                          if (_nameController.text.isNotEmpty &&
+                              _priceController.text.isNotEmpty &&
+                              _locationController.text.isNotEmpty) {
+                            Navigator.pop(
+                              context,
+                              Restaurant(
+                                name: _nameController.text,
+                                price: _priceController.text,
+                                location: _locationController.text,
+                                description: _descriptionController.text,
+                              ),
+                            );
+                          }
                         },
                         child: Container(
-                          width: double.infinity, // Changed to take full width
-                          padding: const EdgeInsets.symmetric(vertical: 12), // Reduced from 15
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(vertical: 12),
                           decoration: BoxDecoration(
                             color: const Color(0xffc29424),
                             borderRadius: BorderRadius.circular(15),
@@ -105,7 +128,7 @@ class SellRes extends StatelessWidget {
     );
   }
 
-  Widget buildFormField(String label, {int maxLines = 1}) {
+  Widget buildFormField(String label, TextEditingController controller, {int maxLines = 1}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -119,6 +142,7 @@ class SellRes extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         TextFormField(
+          controller: controller,
           style: const TextStyle(color: Colors.black), // Changed to black text
           maxLines: maxLines,
           decoration: InputDecoration(
@@ -141,5 +165,14 @@ class SellRes extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _priceController.dispose();
+    _locationController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
   }
 }
