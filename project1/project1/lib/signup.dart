@@ -37,18 +37,21 @@ class _SignupPageState extends State<SignupPage> {
               child: Form(
                 key: _formKey,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Evenly space elements
                   children: [
+                    // Name Field
                     TextFormField(
                       controller: _nameController,
-                      textAlign: TextAlign.right,  // Changed to right
-                      textDirection: TextDirection.rtl,  // Added RTL
+                      textAlign: TextAlign.right,
+                      textDirection: TextDirection.rtl,
                       decoration: InputDecoration(
-                        labelText: 'الاسم الكامل',
-                        alignLabelWithHint: true,  // Added for label alignment
-                        floatingLabelAlignment: FloatingLabelAlignment.start,  // Added for floating label
+                        hintText: 'الاسم الكامل',
+                        hintStyle: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 16,
+                        ),
                         filled: true,
                         fillColor: Colors.grey[200],
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                           borderSide: const BorderSide(color: Colors.grey, width: 1),
@@ -70,17 +73,20 @@ class _SignupPageState extends State<SignupPage> {
                       },
                     ),
                     const SizedBox(height: 20),
-                    // Apply same decoration to email field
+                    // Email / Phone Field
                     TextFormField(
                       controller: _emailController,
-                      textAlign: TextAlign.right,  // Changed to right
-                      textDirection: TextDirection.rtl,  // Added RTL
+                      textAlign: TextAlign.right,
+                      textDirection: TextDirection.rtl,
                       decoration: InputDecoration(
-                        labelText: 'رقم الهاتف',
-                        alignLabelWithHint: true,  // Added for label alignment
-                        floatingLabelAlignment: FloatingLabelAlignment.start,  // Added for floating label
+                        hintText: 'رقم الهاتف',
+                        hintStyle: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 16,
+                        ),
                         filled: true,
                         fillColor: Colors.grey[200],
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                           borderSide: const BorderSide(color: Colors.grey, width: 1),
@@ -102,17 +108,21 @@ class _SignupPageState extends State<SignupPage> {
                       },
                     ),
                     const SizedBox(height: 20),
-                    // Apply same decoration to password field
+                    // Password Field
                     TextFormField(
                       controller: _passwordController,
-                      textAlign: TextAlign.right,  // Changed to right
-                      textDirection: TextDirection.rtl,  // Added RTL
+                      obscureText: true,
+                      textAlign: TextAlign.right,
+                      textDirection: TextDirection.rtl,
                       decoration: InputDecoration(
-                        labelText: 'كلمة السر',
-                        alignLabelWithHint: true,  // Added for label alignment
-                        floatingLabelAlignment: FloatingLabelAlignment.start,  // Added for floating label
+                        hintText: 'كلمة السر',
+                        hintStyle: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 16,
+                        ),
                         filled: true,
                         fillColor: Colors.grey[200],
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                           borderSide: const BorderSide(color: Colors.grey, width: 1),
@@ -126,7 +136,6 @@ class _SignupPageState extends State<SignupPage> {
                           borderSide: const BorderSide(color: Colors.grey, width: 1),
                         ),
                       ),
-                      obscureText: true,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'نرجو إدخال كلمة السر';
@@ -135,17 +144,21 @@ class _SignupPageState extends State<SignupPage> {
                       },
                     ),
                     const SizedBox(height: 20),
-                    // Apply same decoration to confirm password field
+                    // Confirm Password Field
                     TextFormField(
                       controller: _confirmPasswordController,
-                      textAlign: TextAlign.right,  // Changed to right
-                      textDirection: TextDirection.rtl,  // Added RTL
+                      obscureText: true,
+                      textAlign: TextAlign.right,
+                      textDirection: TextDirection.rtl,
                       decoration: InputDecoration(
-                        labelText: 'اعادة كلمة السر',
-                        alignLabelWithHint: true,  // Added for label alignment
-                        floatingLabelAlignment: FloatingLabelAlignment.start,  // Added for floating label
+                        hintText: 'اعادة كلمة السر',
+                        hintStyle: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 16,
+                        ),
                         filled: true,
                         fillColor: Colors.grey[200],
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                           borderSide: const BorderSide(color: Colors.grey, width: 1),
@@ -159,7 +172,6 @@ class _SignupPageState extends State<SignupPage> {
                           borderSide: const BorderSide(color: Colors.grey, width: 1),
                         ),
                       ),
-                      obscureText: true,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'نرجوا اعادة إدخال كلمة السر';

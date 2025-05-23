@@ -35,19 +35,20 @@ class _LoginPageState extends State<LoginPage> {
               child: Form(
                 key: _formKey,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Evenly space elements
                   children: [
                     TextFormField(
                       controller: _emailController,
                       textAlign: TextAlign.right,
                       textDirection: TextDirection.rtl,
                       decoration: InputDecoration(
-                        labelText: 'رقم الهاتف',
-                        alignLabelWithHint: true,
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        floatingLabelAlignment: FloatingLabelAlignment.start,
+                        hintText: 'رقم الهاتف',
+                        hintStyle: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 16,
+                        ),
                         filled: true,
                         fillColor: Colors.grey[200],
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                           borderSide: const BorderSide(color: Colors.grey, width: 1),
@@ -71,14 +72,18 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: 20),
                     TextFormField(
                       controller: _passwordController,
-                      textAlign: TextAlign.right,  // Changed to right
-                      textDirection: TextDirection.rtl,  // Added RTL
+                      obscureText: true,
+                      textAlign: TextAlign.right,
+                      textDirection: TextDirection.rtl,
                       decoration: InputDecoration(
-                        labelText: 'كلمة السر',
-                        alignLabelWithHint: true,  // Added for label alignment
-                        floatingLabelAlignment: FloatingLabelAlignment.start,  // Added for floating label
+                        hintText: 'كلمة السر',
+                        hintStyle: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 16,
+                        ),
                         filled: true,
                         fillColor: Colors.grey[200],
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                           borderSide: const BorderSide(color: Colors.grey, width: 1),
@@ -92,10 +97,9 @@ class _LoginPageState extends State<LoginPage> {
                           borderSide: const BorderSide(color: Colors.grey, width: 1),
                         ),
                       ),
-                      obscureText: true,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'نرجو إدخال كلمة السرط';
+                          return 'نرجو إدخال كلمة السر';
                         }
                         return null;
                       },
@@ -114,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
                           }
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xffc29424), // You can change this to your desired color
+                          backgroundColor: const Color(0xffc29424),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15),
                           ),
@@ -123,7 +127,8 @@ class _LoginPageState extends State<LoginPage> {
                           'تسجيل الدخول',
                           style: TextStyle(
                             fontSize: 18,
-                            fontWeight: FontWeight.bold,color: Colors.white
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
                           ),
                         ),
                       ),
@@ -136,9 +141,15 @@ class _LoginPageState extends State<LoginPage> {
                           onPressed: () {
                             Navigator.pushNamed(context, '/signup');
                           },
-                          child: const Text('انشاء حساب',style: TextStyle(color: Color(0xff184c6b)),),
+                          child: const Text(
+                            'انشاء حساب',
+                            style: TextStyle(color: Color(0xff184c6b)),
+                          ),
                         ),
-                        const Text("ليس لديك حساب؟",style: TextStyle(color:Colors.black),),
+                        const Text(
+                          "ليس لديك حساب؟",
+                          style: TextStyle(color: Colors.black),
+                        ),
                       ],
                     ),
                   ],
