@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'editprofile.dart';
+import 'opinion.dart'; // Add this import
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -12,135 +14,49 @@ class ProfilePage extends StatelessWidget {
           Column(
             children: [
               const SizedBox(height: 60),
-              // Profile Avatar and Name Section
-              const CircleAvatar(
-                radius: 50,
-                backgroundColor: Colors.white,
-                child: Icon(
-                  Icons.person,
-                  size: 50,
-                  color: Color(0xff184c6b),
-                ),
-              ),
-              const SizedBox(height: 30),
-              // User Info Containers
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+              // Profile Header
+              Center(
                 child: Column(
                   children: [
-                    // First Name Container
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(15),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.1),
-                            spreadRadius: 1,
-                            blurRadius: 3,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: const Text(
-                        'First Name', // Will be replaced with actual first name
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: Color(0xff184c6b),
-                        ),
+                    const CircleAvatar(
+                      radius: 50,
+                      backgroundColor: Colors.white,
+                      child: Icon(
+                        Icons.person,
+                        size: 50,
+                        color: Color(0xff184c6b),
                       ),
                     ),
-                    const SizedBox(height: 15),
-                    // Rest of Name Container
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(15),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.1),
-                            spreadRadius: 1,
-                            blurRadius: 3,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: const Text(
-                        'Rest of Name', // Will be replaced with actual rest of name
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: Color(0xff184c6b),
-                        ),
+                    const SizedBox(height: 20),
+                    const Text(
+                      'User Name',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xff184c6b),
                       ),
                     ),
-                    const SizedBox(height: 15),
-                    // Email Container
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(15),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.1),
-                            spreadRadius: 1,
-                            blurRadius: 3,
-                            offset: const Offset(0, 2),
-                          ),
+                    const SizedBox(height: 40), // Increased height to maintain spacing
+                    // Profile Options
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Column(
+                        children: [
+                          buildProfileOption(context, Icons.person_outline, 'الصفحة الشخصية'),
+                          const SizedBox(height: 15),
+                          buildProfileOption(context, Icons.settings, 'التواصل مع الادارة'),
+                          const SizedBox(height: 15),
+                          buildProfileOption(context, Icons.help_outline, 'تسجيل خروج'),
+                          const SizedBox(height: 15),
                         ],
-                      ),
-                      child: const Text(
-                        'user@email.com', // Will be replaced with actual email
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: Color(0xff184c6b),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 15),
-                    // Phone Number Container with TextFormField
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(15),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.1),
-                            spreadRadius: 1,
-                            blurRadius: 3,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: TextFormField(
-                        decoration: const InputDecoration(
-                          hintText: 'Enter Phone Number',
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(
-                            color: Colors.grey,
-                          ),
-                        ),
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: Color(0xff184c6b),
-                        ),
-                        keyboardType: TextInputType.phone,
                       ),
                     ),
                   ],
                 ),
               ),
               const SizedBox(height: 40),
+              // Profile Options
+             
             ],
           ),
           Positioned(
@@ -155,6 +71,106 @@ class ProfilePage extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget buildProfileOption(BuildContext context, IconData icon, String title) {
+    return InkWell(
+      onTap: () {
+        switch (title) {
+          case 'الصفحة الشخصية':
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const EditProfilePage()),
+            );
+            break;
+          case 'التواصل مع الادارة':
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => OpinionPage(restaurantName: 'تواصل معنا'),
+              ),
+            );
+            break;
+          case 'تسجيل خروج':
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text(
+                    'تسجيل خروج',
+                    textAlign: TextAlign.right,
+                    style: TextStyle(color: Color(0xff184c6b)),
+                  ),
+                  content: const Text(
+                    'هل أنت متأكد من تسجيل الخروج؟',
+                    textAlign: TextAlign.right,
+                  ),
+                  actions: [
+                    TextButton(
+                      child: const Text(
+                        'لا',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop(); // Close dialog
+                      },
+                    ),
+                    TextButton(
+                      child: const Text(
+                        'نعم',
+                        style: TextStyle(color: Color(0xff184c6b)),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop(); // Close dialog
+                        Navigator.pushReplacementNamed(context, '/'); // Go to login
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
+            break;
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 3,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Icon(
+              icon,
+              color: const Color(0xff184c6b),
+              size: 24,
+            ),
+            const SizedBox(width: 15),
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            const Spacer(),
+            const Icon(
+              Icons.arrow_forward_ios,
+              color: Color(0xff184c6b),
+              size: 16,
+            ),
+          ],
+        ),
       ),
     );
   }

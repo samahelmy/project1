@@ -54,28 +54,12 @@ class _homepageState extends State<homepage> {
                       _buildClickableContainer('التقييم'),
                     ],
                   ),
-                  const SizedBox(height: 20),
-                  // Bottom container
-                  _buildClickableContainer('Contact Us', isWide: true),
+                  const SizedBox(height: 20), // Keep some bottom spacing
                 ],
               ),
             ),
           ),
-          // Left logout button
-          Positioned(
-            top: 40,
-            left: 20,
-            child: IconButton(
-              icon: const Icon(
-                Icons.logout,
-                color: Color(0xff184c6b),
-              ),
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, '/');
-              },
-            ),
-          ),
-          // Right settings button
+          // Right profile button only
           Positioned(
             top: 40,
             right: 20,
