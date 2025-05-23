@@ -41,8 +41,12 @@ class _SignupPageState extends State<SignupPage> {
                   children: [
                     TextFormField(
                       controller: _nameController,
+                      textAlign: TextAlign.right,  // Changed to right
+                      textDirection: TextDirection.rtl,  // Added RTL
                       decoration: InputDecoration(
-                        labelText: 'Full Name',
+                        labelText: 'الاسم الكامل',
+                        alignLabelWithHint: true,  // Added for label alignment
+                        floatingLabelAlignment: FloatingLabelAlignment.start,  // Added for floating label
                         filled: true,
                         fillColor: Colors.grey[200],
                         border: OutlineInputBorder(
@@ -60,7 +64,7 @@ class _SignupPageState extends State<SignupPage> {
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your name';
+                          return 'نرجوا إدخال الاسم الكامل';
                         }
                         return null;
                       },
@@ -69,8 +73,12 @@ class _SignupPageState extends State<SignupPage> {
                     // Apply same decoration to email field
                     TextFormField(
                       controller: _emailController,
+                      textAlign: TextAlign.right,  // Changed to right
+                      textDirection: TextDirection.rtl,  // Added RTL
                       decoration: InputDecoration(
-                        labelText: 'Email',
+                        labelText: 'رقم الهاتف',
+                        alignLabelWithHint: true,  // Added for label alignment
+                        floatingLabelAlignment: FloatingLabelAlignment.start,  // Added for floating label
                         filled: true,
                         fillColor: Colors.grey[200],
                         border: OutlineInputBorder(
@@ -88,7 +96,7 @@ class _SignupPageState extends State<SignupPage> {
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your email';
+                          return 'نرجوا إدخال رقم الهاتف';
                         }
                         return null;
                       },
@@ -97,8 +105,12 @@ class _SignupPageState extends State<SignupPage> {
                     // Apply same decoration to password field
                     TextFormField(
                       controller: _passwordController,
+                      textAlign: TextAlign.right,  // Changed to right
+                      textDirection: TextDirection.rtl,  // Added RTL
                       decoration: InputDecoration(
-                        labelText: 'Password',
+                        labelText: 'كلمة السر',
+                        alignLabelWithHint: true,  // Added for label alignment
+                        floatingLabelAlignment: FloatingLabelAlignment.start,  // Added for floating label
                         filled: true,
                         fillColor: Colors.grey[200],
                         border: OutlineInputBorder(
@@ -117,7 +129,7 @@ class _SignupPageState extends State<SignupPage> {
                       obscureText: true,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter a password';
+                          return 'نرجو إدخال كلمة السر';
                         }
                         return null;
                       },
@@ -126,8 +138,12 @@ class _SignupPageState extends State<SignupPage> {
                     // Apply same decoration to confirm password field
                     TextFormField(
                       controller: _confirmPasswordController,
+                      textAlign: TextAlign.right,  // Changed to right
+                      textDirection: TextDirection.rtl,  // Added RTL
                       decoration: InputDecoration(
-                        labelText: 'Confirm Password',
+                        labelText: 'اعادة كلمة السر',
+                        alignLabelWithHint: true,  // Added for label alignment
+                        floatingLabelAlignment: FloatingLabelAlignment.start,  // Added for floating label
                         filled: true,
                         fillColor: Colors.grey[200],
                         border: OutlineInputBorder(
@@ -146,10 +162,10 @@ class _SignupPageState extends State<SignupPage> {
                       obscureText: true,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please confirm your password';
+                          return 'نرجوا اعادة إدخال كلمة السر';
                         }
                         if (value != _passwordController.text) {
-                          return 'Passwords do not match';
+                          return 'كلمة السر غير متطابقة';
                         }
                         return null;
                       },
@@ -174,7 +190,7 @@ class _SignupPageState extends State<SignupPage> {
                           ),
                         ),
                         child: const Text(
-                          'Sign Up',
+                          "انشاء حساب",
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -187,16 +203,16 @@ class _SignupPageState extends State<SignupPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text("Already have an account?"),
                         TextButton(
                           onPressed: () {
                             Navigator.pushReplacementNamed(context, '/');
                           },
                           child: const Text(
-                            'Login',
+                            'تسجيل الدخول',
                             style: TextStyle(color: Color(0xff184c6b)),
                           ),
                         ),
+                        const Text("هل لديك حساب؟"),
                       ],
                     ),
                   ],

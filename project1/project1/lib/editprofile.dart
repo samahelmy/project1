@@ -9,6 +9,9 @@ class EditProfilePage extends StatefulWidget {
 
 class _EditProfilePageState extends State<EditProfilePage> {
   String selectedGender = 'ذكر';
+  bool isEditing = false;
+  final nameController = TextEditingController(text: 'محمد احمد');
+  final phoneController = TextEditingController(text: '+966 50 123 4567');
 
   @override
   Widget build(BuildContext context) {
@@ -51,44 +54,53 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      buildInfoRow('الاسم:', 'محمد احمد'),
+                      buildEditableRow('الاسم', nameController),
                       const SizedBox(height: 20),
-                      buildInfoRow('رقم الجوال:', '+966 50 123 4567'),
+                      buildEditableRow('رقم الجوال', phoneController),
                       const SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFF7F6F2),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: DropdownButton<String>(
-                              value: selectedGender,
-                              items: ['ذكر', 'انثى'].map((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(
-                                    value,
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      color: Color(0xff184c6b),
+                          if (isEditing)
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 20),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFF7F6F2),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: DropdownButton<String>(
+                                value: selectedGender,
+                                items: ['ذكر', 'انثى'].map((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(
+                                      value,
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        color: Color(0xff184c6b),
+                                      ),
                                     ),
-                                  ),
-                                );
-                              }).toList(),
-                              onChanged: (newValue) {
-                                setState(() {
-                                  selectedGender = newValue!;
-                                });
-                              },
-                              underline: Container(),
+                                  );
+                                }).toList(),
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    selectedGender = newValue!;
+                                  });
+                                },
+                                underline: Container(),
+                              ),
+                            )
+                          else
+                            Text(
+                              selectedGender,
+                              style: const TextStyle(
+                                fontSize: 18,
+                                color: Colors.black87,
+                              ),
                             ),
-                          ),
                           const SizedBox(width: 20),
                           const Text(
-                            'الجنس:',
+                            'الجنس',
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -101,6 +113,32 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   ),
                 ),
               ],
+            ),
+          ),
+          Positioned(
+            top: 40,
+            right: 20,
+            child: TextButton.icon(
+              onPressed: () {
+                setState(() {
+                  if (isEditing) {
+                    // Save changes here
+                    // You can add API calls or database updates
+                  }
+                  isEditing = !isEditing;
+                });
+              },
+              icon: Icon(
+                isEditing ? Icons.save : Icons.edit,
+                color: const Color(0xff184c6b),
+              ),
+              label: Text(
+                isEditing ? 'حفظ' : 'تعديل',
+                style: const TextStyle(
+                  color: Color(0xff184c6b),
+                  fontSize: 16,
+                ),
+              ),
             ),
           ),
           Positioned(
@@ -119,17 +157,37 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  Widget buildInfoRow(String label, String value) {
+  Widget buildEditableRow(String label, TextEditingController controller) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Text(
-          value,
-          style: const TextStyle(
-            fontSize: 18,
-            color: Colors.black87,
+        if (isEditing)
+          Expanded(
+            child: TextField(
+              controller: controller,
+              textAlign: TextAlign.right,
+              cursorColor: Colors.black,
+              decoration: const InputDecoration(
+                border: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black),
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black),
+                ),
+              ),
+            ),
+          )
+        else
+          Text(
+            controller.text,
+            style: const TextStyle(
+              fontSize: 18,
+              color: Colors.black87,
+            ),
           ),
-        ),
         const SizedBox(width: 20),
         Text(
           label,
@@ -141,5 +199,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
         ),
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    phoneController.dispose();
+    super.dispose();
   }
 }

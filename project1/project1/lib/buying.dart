@@ -10,7 +10,23 @@ class Buying extends StatefulWidget {
 }
 
 class _BuyingState extends State<Buying> {
-  List<Restaurant> restaurants = [];
+  List<Restaurant> restaurants = [
+    Restaurant(
+      name: 'مطعم السعادة',
+      price: '500,000',
+      location: 'الرياض - حي النخيل',
+    ),
+    Restaurant(
+      name: 'كافيه الصفا',
+      price: '750,000',
+      location: 'الرياض - حي الورود',
+    ),
+    Restaurant(
+      name: 'مطعم النخبة',
+      price: '1,200,000',
+      location: 'الرياض - حي العليا',
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -109,59 +125,77 @@ class _BuyingState extends State<Buying> {
                 ),
               ),
               Expanded(
-                child: GridView.builder(
+                child: ListView.builder(
                   padding: const EdgeInsets.all(15),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 0.8,
-                    crossAxisSpacing: 15,
-                    mainAxisSpacing: 15,
-                  ),
                   itemCount: restaurants.length,
                   itemBuilder: (context, index) {
-                    return Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(15),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.1),
-                            spreadRadius: 1,
-                            blurRadius: 3,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            restaurants[index].name,
-                            style: const TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xff184c6b),
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 15),
+                      child: Container(
+                        height: 180,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.1),
+                              spreadRadius: 1,
+                              blurRadius: 3,
+                              offset: const Offset(0, 2),
                             ),
+                          ],
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(15),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 150,
+                                height: 150,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  image: const DecorationImage(
+                                    image: AssetImage('assets/ServTech.png'),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 20),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      restaurants[index].name,
+                                      style: const TextStyle(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xff184c6b),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Text(
+                                      '${restaurants[index].price} ريال',
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        color: Color(0xffc29424),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Text(
+                                      restaurants[index].location,
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(height: 5),
-                          Text(
-                            '${restaurants[index].price} EGP',
-                            style: const TextStyle(
-                              fontSize: 35,
-                              color:Colors.black,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            restaurants[index].description,
-                            maxLines: 3,
-                            style: const TextStyle(
-                              fontSize: 25,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     );
                   },

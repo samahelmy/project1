@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'models/product.dart';
 
 class SellPro extends StatelessWidget {
   const SellPro({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final nameController = TextEditingController();
+    final priceController = TextEditingController();
+    final descriptionController = TextEditingController();
+
     return Scaffold(
       backgroundColor: const Color(0xFFF7F6F2),
       body: Column(
@@ -48,7 +53,7 @@ class SellPro extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                buildFormField('اسم المنتج'),
+                buildFormField('اسم المنتج', nameController),
                 const SizedBox(height: 20),
                 const Text(
                   'السعر',
@@ -59,7 +64,7 @@ class SellPro extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                buildFormField('السعر'),
+                buildFormField('السعر', priceController),
                 const SizedBox(height: 20),
                 const Text(
                   'الوصف',
@@ -71,6 +76,7 @@ class SellPro extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 TextFormField(
+                  controller: descriptionController,
                   maxLines: 4, // Makes the field taller
                   decoration: InputDecoration(
                     filled: true,
@@ -98,7 +104,18 @@ class SellPro extends StatelessWidget {
                     height: 50,
                     child: ElevatedButton(
                       onPressed: () {
-                        // Add your click handling here
+                        if (nameController.text.isNotEmpty &&
+                            priceController.text.isNotEmpty &&
+                            descriptionController.text.isNotEmpty) {
+                          Navigator.pop(
+                            context,
+                            Product(
+                              name: nameController.text,
+                              price: priceController.text,
+                              description: descriptionController.text,
+                            ),
+                          );
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xffc29424),
@@ -136,8 +153,9 @@ class SellPro extends StatelessWidget {
     );
   }
 
-  Widget buildFormField(String label) {
+  Widget buildFormField(String label, TextEditingController controller) {
     return TextFormField(
+      controller: controller,
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.grey[200],

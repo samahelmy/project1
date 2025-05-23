@@ -8,6 +8,6 @@ class Restaurant {
     required this.name,
     required this.price,
     required this.location,
-    required this.description,
+    this.description = '', // Optional with default empty string
   });
 }

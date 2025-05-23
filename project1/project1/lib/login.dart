@@ -39,10 +39,15 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     TextFormField(
                       controller: _emailController,
+                      textAlign: TextAlign.right,
+                      textDirection: TextDirection.rtl,
                       decoration: InputDecoration(
-                        labelText: 'Email',
+                        labelText: 'رقم الهاتف',
+                        alignLabelWithHint: true,
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                        floatingLabelAlignment: FloatingLabelAlignment.start,
                         filled: true,
-                        fillColor: Colors.grey[200], // Darker background
+                        fillColor: Colors.grey[200],
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                           borderSide: const BorderSide(color: Colors.grey, width: 1),
@@ -58,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your email';
+                          return 'نرجوا إدخال رقم الهاتف';
                         }
                         return null;
                       },
@@ -66,10 +71,14 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: 20),
                     TextFormField(
                       controller: _passwordController,
+                      textAlign: TextAlign.right,  // Changed to right
+                      textDirection: TextDirection.rtl,  // Added RTL
                       decoration: InputDecoration(
-                        labelText: 'Password',
+                        labelText: 'كلمة السر',
+                        alignLabelWithHint: true,  // Added for label alignment
+                        floatingLabelAlignment: FloatingLabelAlignment.start,  // Added for floating label
                         filled: true,
-                        fillColor: Colors.grey[200], // Darker background
+                        fillColor: Colors.grey[200],
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                           borderSide: const BorderSide(color: Colors.grey, width: 1),
@@ -86,7 +95,7 @@ class _LoginPageState extends State<LoginPage> {
                       obscureText: true,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your password';
+                          return 'نرجو إدخال كلمة السرط';
                         }
                         return null;
                       },
@@ -111,7 +120,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         child: const Text(
-                          'Login',
+                          'تسجيل الدخول',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,color: Colors.white
@@ -123,13 +132,13 @@ class _LoginPageState extends State<LoginPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text("Don't have an account?"),
                         TextButton(
                           onPressed: () {
                             Navigator.pushNamed(context, '/signup');
                           },
-                          child: const Text('Sign Up',style: TextStyle(color: Color(0xff184c6b)),),
+                          child: const Text('انشاء حساب',style: TextStyle(color: Color(0xff184c6b)),),
                         ),
+                        const Text("ليس لديك حساب؟",style: TextStyle(color:Colors.black),),
                       ],
                     ),
                   ],
