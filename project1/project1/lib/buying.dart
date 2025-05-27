@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'sellres.dart';
 import 'models/restaurant.dart';
+import 'availableres.dart';
 
 class Buying extends StatefulWidget {
   const Buying({super.key});
@@ -38,9 +39,9 @@ class _BuyingState extends State<Buying> {
             children: [
               Container(
                 width: MediaQuery.of(context).size.width,
-                height: 180, // Increased from 120
+                height: 180,
                 decoration: BoxDecoration(
-                  color: const Color(0xffc29424), // Changed to golden color
+                  color: const Color(0xffc29424),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.2),
@@ -52,13 +53,13 @@ class _BuyingState extends State<Buying> {
                 ),
                 child: const Center(
                   child: Padding(
-                    padding: EdgeInsets.only(top: 60), // Increased from 40
+                    padding: EdgeInsets.only(top: 60),
                     child: Text(
                       'بيع وشراء وتأجير المطعم',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white, // Changed to white
+                        color: Colors.white,
                       ),
                     ),
                   ),
@@ -80,10 +81,10 @@ class _BuyingState extends State<Buying> {
                     }
                   },
                   child: Container(
-                    width: MediaQuery.of(context).size.width * 0.7, // Changed from double.infinity to 70% of screen width
+                    width: MediaQuery.of(context).size.width * 0.7,
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: const Color(0xffc29424), // Changed to golden color
+                      color: const Color(0xffc29424),
                       borderRadius: BorderRadius.circular(10),
                       boxShadow: [
                         BoxShadow(
@@ -97,8 +98,8 @@ class _BuyingState extends State<Buying> {
                     child: const Center(
                       child: Text(
                         'اضافة مطعم للبيع',
-                        textAlign: TextAlign.right, // Add text alignment
-                        textDirection: TextDirection.rtl, // Add text direction for RTL
+                        textAlign: TextAlign.right,
+                        textDirection: TextDirection.rtl,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -131,69 +132,81 @@ class _BuyingState extends State<Buying> {
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 15),
-                      child: Container(
-                        height: 180,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(15),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.1),
-                              spreadRadius: 1,
-                              blurRadius: 3,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(15),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 150,
-                                height: 150,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  image: const DecorationImage(
-                                    image: AssetImage('assets/ServTech.png'),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AvailableRes(
+                                restaurant: restaurants[index],
                               ),
-                              const SizedBox(width: 20),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      restaurants[index].name,
-                                      style: const TextStyle(
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xff184c6b),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10),
-                                    Text(
-                                      '${restaurants[index].price} ريال',
-                                      style: const TextStyle(
-                                        fontSize: 20,
-                                        color: Color(0xffc29424),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10),
-                                    Text(
-                                      restaurants[index].location,
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          height: 180,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.1),
+                                spreadRadius: 1,
+                                blurRadius: 3,
+                                offset: const Offset(0, 2),
                               ),
                             ],
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(15),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 150,
+                                  height: 150,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    image: const DecorationImage(
+                                      image: AssetImage('assets/ServTech.png'),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 20),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        restaurants[index].name,
+                                        style: const TextStyle(
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xff184c6b),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Text(
+                                        '${restaurants[index].price} ريال',
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          color: Color(0xffc29424),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Text(
+                                        restaurants[index].location,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
