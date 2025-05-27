@@ -91,7 +91,7 @@ class _homepageState extends State<homepage> {
         if (text == 'التوظيف') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const Jobs()),
+            MaterialPageRoute(builder: (context) => Jobs()),  // Removed const
           );
         } else if (text == 'بيع وشراء وتأجير المطاعم') {
           Navigator.push(

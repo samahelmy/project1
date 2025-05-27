@@ -1,7 +1,32 @@
 import 'package:flutter/material.dart';
+import 'models/job.dart';
+import 'availablejobs.dart';
 
 class Jobs extends StatelessWidget {
-  const Jobs({super.key});
+  Jobs({super.key});
+
+  final List<Job> jobs = [
+    Job(
+      title: 'شيف مطبخ رئيسي',
+      description: 'خبرة 5 سنوات في المطاعم العالمية',
+      location: 'الرياض - حي النخيل',
+    ),
+    Job(
+      title: 'نادل / مضيف',
+      description: 'خبرة سنتين في خدمة العملاء',
+      location: 'الرياض - حي العليا',
+    ),
+    Job(
+      title: 'كاشير',
+      description: 'خبرة في التعامل مع نظم نقاط البيع',
+      location: 'الرياض - حي الورود',
+    ),
+    Job(
+      title: 'مساعد طباخ',
+      description: 'خبرة سنة في المطابخ العالمية',
+      location: 'الرياض - حي النخيل',
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -53,17 +78,22 @@ class Jobs extends StatelessWidget {
           const SizedBox(height: 20),
           Expanded(
             child: ListView.builder(
-              itemCount: 10, // Replace with your actual item count
+              itemCount: jobs.length,
               padding: const EdgeInsets.all(10),
               itemBuilder: (context, index) {
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 10),
                   child: InkWell(
                     onTap: () {
-                      // Add your click handling here
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AvailableJobs(job: jobs[index]),
+                        ),
+                      );
                     },
                     child: Container(
-                      height: 100,
+                      height: 120,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(10),
@@ -77,17 +107,17 @@ class Jobs extends StatelessWidget {
                         ],
                       ),
                       child: Row(
+                        textDirection: TextDirection.rtl, // Add RTL direction
                         children: [
                           Container(
                             width: 100,
                             decoration: BoxDecoration(
                               borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                bottomLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomRight: Radius.circular(10),
                               ),
-                              image: DecorationImage(
-                                image: AssetImage(
-                                    'assets/ServTech.png'), // Add your job images
+                              image: const DecorationImage(
+                                image: AssetImage('assets/ServTech.png'),
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -95,22 +125,24 @@ class Jobs extends StatelessWidget {
                           const SizedBox(width: 15),
                           Expanded(
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.end,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  'Job Title ${index + 1}',
+                                  jobs[index].title,
                                   style: const TextStyle(
-                                    fontSize: 18,
+                                    fontSize: 22,
                                     fontWeight: FontWeight.bold,
+                                    color: Color(0xff184c6b),
                                   ),
                                 ),
-                                const SizedBox(height: 5),
+                                
+                                const SizedBox(height: 12),
                                 Text(
-                                  'Job description or location goes here',
-                                  style: TextStyle(
+                                  jobs[index].location,
+                                  style: const TextStyle(
                                     fontSize: 14,
-                                    color: Colors.grey[600],
+                                    color: Color(0xffc29424),
                                   ),
                                 ),
                               ],
