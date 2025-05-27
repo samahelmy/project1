@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project1/sellpro.dart';
+import 'availablepro.dart';
 import 'models/product.dart';
 
 class ResProducts extends StatefulWidget {
@@ -129,69 +130,81 @@ class _ResProductsState extends State<ResProducts> {
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 15),
-                      child: Container(
-                        height: 180,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(15),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.1),
-                              spreadRadius: 1,
-                              blurRadius: 3,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(15),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 150,
-                                height: 150,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  image: const DecorationImage(
-                                    image: AssetImage('assets/ServTech.png'),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AvailablePro(
+                                product: products[index],
                               ),
-                              const SizedBox(width: 20),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      products[index].name,
-                                      style: const TextStyle(
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xff184c6b),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10),
-                                    Text(
-                                      '${products[index].price} ريال',
-                                      style: const TextStyle(
-                                        fontSize: 20,
-                                        color: Color(0xffc29424),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10),
-                                    Text(
-                                      products[index].description,
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          height: 180,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.1),
+                                spreadRadius: 1,
+                                blurRadius: 3,
+                                offset: const Offset(0, 2),
                               ),
                             ],
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(15),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 150,
+                                  height: 150,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    image: const DecorationImage(
+                                      image: AssetImage('assets/ServTech.png'),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 20),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        products[index].name,
+                                        style: const TextStyle(
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xff184c6b),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Text(
+                                        '${products[index].price} ريال',
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          color: Color(0xffc29424),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Text(
+                                        products[index].description,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
