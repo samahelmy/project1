@@ -14,15 +14,12 @@ class AvailablePro extends StatelessWidget {
         children: [
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-           
+
             child: SafeArea(
               child: Row(
                 children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back_ios, color: Color(0xff184c6b)),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                 
+                  IconButton(icon: const Icon(Icons.arrow_back_ios, color: Color(0xff184c6b)), onPressed: () => Navigator.pop(context)),
+
                   const SizedBox(width: 40),
                 ],
               ),
@@ -35,11 +32,15 @@ class AvailablePro extends StatelessWidget {
                   Container(
                     width: double.infinity,
                     height: 280,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('assets/ServTech.png'),
-                        fit: BoxFit.cover,
-                      ),
+                    margin: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), spreadRadius: 1, blurRadius: 10, offset: const Offset(0, 3))],
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: AspectRatio(aspectRatio: 16 / 9, child: FittedBox(fit: BoxFit.contain, child: Image.asset('assets/ServTech.png'))),
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -48,51 +49,15 @@ class AvailablePro extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text(
-                          product.name,
-                          style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xff184c6b),
-                          ),
-                        ),
+                        Text(product.name, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xff184c6b))),
                         const SizedBox(height: 30),
-                        const Text(
-                          "الوصف",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xff184c6b),
-                          ),
-                        ),
+                        const Text("الوصف", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xff184c6b))),
                         const SizedBox(height: 10),
-                        Text(
-                          product.description,
-                          textAlign: TextAlign.right,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: Colors.grey,
-                            height: 1.5,
-                          ),
-                        ),
+                        Text(product.description, textAlign: TextAlign.right, style: const TextStyle(fontSize: 16, color: Colors.grey, height: 1.5)),
                         const SizedBox(height: 30),
-                        const Text(
-                          "السعر",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xff184c6b),
-                          ),
-                        ),
+                        const Text("السعر", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xff184c6b))),
                         const SizedBox(height: 10),
-                        Text(
-                          "${product.price} ريال",
-                          style: const TextStyle(
-                            fontSize: 24,
-                            color: Color(0xffc29424),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        Text("${product.price} ريال", style: const TextStyle(fontSize: 24, color: Color(0xffc29424), fontWeight: FontWeight.bold)),
                         const SizedBox(height: 40),
                         SizedBox(
                           width: double.infinity,
@@ -103,18 +68,9 @@ class AvailablePro extends StatelessWidget {
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xffc29424),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                             ),
-                            child: const Text(
-                              "شراء",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
+                            child: const Text("شراء", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
                           ),
                         ),
                       ],

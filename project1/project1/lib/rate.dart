@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'opinion.dart';
 import 'rateinfo.dart';
 import 'models/rating_provider.dart';
 

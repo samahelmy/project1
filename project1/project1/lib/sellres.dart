@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'models/restaurant.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SellRes extends StatefulWidget {
   const SellRes({super.key});
@@ -13,117 +15,146 @@ class _SellResState extends State<SellRes> {
   final _priceController = TextEditingController();
   final _locationController = TextEditingController();
   final _descriptionController = TextEditingController();
+  bool _isLoading = false;
+
+  Future<void> _submitRestaurant() async {
+    // Validate all fields
+    if (_nameController.text.isEmpty || _priceController.text.isEmpty || _locationController.text.isEmpty || _descriptionController.text.isEmpty) {
+      Fluttertoast.showToast(msg: 'جميع الحقول مطلوبة', backgroundColor: Colors.red, textColor: Colors.white);
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
+    try {
+      // Get user phone from SharedPreferences
+      final prefs = await SharedPreferences.getInstance();
+      final userPhone = prefs.getString('phone');
+
+      if (userPhone == null || userPhone.isEmpty) {
+        Fluttertoast.showToast(msg: 'الرجاء تسجيل الدخول أولاً', backgroundColor: Colors.red, textColor: Colors.white);
+        return;
+      }
+
+      await FirebaseFirestore.instance.collection('restaurants').add({
+        'name': _nameController.text,
+        'price': _priceController.text,
+        'location': _locationController.text,
+        'description': _descriptionController.text,
+        'imageUrl': 'assets/ServTech.png',
+        'createdAt': FieldValue.serverTimestamp(),
+        'createdBy': userPhone, // Add the user's phone number
+      });
+
+      if (mounted) {
+        Fluttertoast.showToast(msg: 'تم إضافة المطعم بنجاح', backgroundColor: const Color(0xff184c6b), textColor: Colors.white);
+        Navigator.pop(context);
+      }
+    } catch (e) {
+      Fluttertoast.showToast(msg: 'حدث خطأ. الرجاء المحاولة مرة أخرى', backgroundColor: Colors.red, textColor: Colors.white);
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
+
+  void _handleImageTap() {
+    Fluttertoast.showToast(msg: 'خاصية رفع الصور غير متاحة حالياً', backgroundColor: const Color(0xff184c6b), textColor: Colors.white);
+    // TODO: Implement Firebase Storage image upload functionality
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF7F6F2),
-      body: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      body: SingleChildScrollView(
+        child: Stack(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const SizedBox(height: 40),
-                // Title
-                const Center(
-                  child: Text(
-                    'اضافة مطعم',
-                    style: TextStyle(
-                      fontSize: 35,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xff184c6b),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                // Form fields wrapped in Expanded
-                Expanded(
+                Padding(
+                  padding: const EdgeInsets.all(16),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      // Restaurant name field
-                      buildFormField('اسم المطعم', _nameController),
-                      // Price field
-                      buildFormField('السعر', _priceController),
-                      // Location field
-                      buildFormField('الموقع', _locationController),
-                      // Description field (larger)
-                      buildFormField('الوصف', _descriptionController, maxLines: 5),
-                    ],
-                  ),
-                ),
-                // Bottom section
-                Column(
-                  children: [
-                    // Add button
-                    Center(
-                      child: InkWell(
-                        onTap: () {
-                          if (_nameController.text.isNotEmpty &&
-                              _priceController.text.isNotEmpty &&
-                              _locationController.text.isNotEmpty) {
-                            Navigator.pop(
-                              context,
-                              Restaurant(
-                                name: _nameController.text,
-                                price: _priceController.text,
-                                location: _locationController.text,
-                                description: _descriptionController.text,
-                              ),
-                            );
-                          }
-                        },
-                        child: Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          decoration: BoxDecoration(
-                            color: const Color(0xffc29424),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: const Center(
-                            child: Text(
-                              'اضافة',
-                              style: TextStyle(
-                                fontSize: 20, // Reduced from 25
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
+                      const SizedBox(height: 60), // Space for back button
+                      const Text('إضافة مطعم', style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold, color: Color(0xff184c6b))),
+                      const SizedBox(height: 24),
+
+                      // Image Upload Placeholder
+                      Center(
+                        child: GestureDetector(
+                          onTap: _handleImageTap,
+                          child: Container(
+                            width: 200,
+                            height: 200,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(color: const Color(0xff184c6b), width: 2, style: BorderStyle.solid),
+                              boxShadow: [
+                                BoxShadow(color: Colors.black.withOpacity(0.1), spreadRadius: 1, blurRadius: 10, offset: const Offset(0, 3)),
+                              ],
+                            ),
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(14),
+                                  child: Image.asset('assets/ServTech.png', width: double.infinity, height: double.infinity, fit: BoxFit.cover),
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(color: Colors.black.withOpacity(0.3), borderRadius: BorderRadius.circular(14)),
+                                  child: const Icon(Icons.camera_alt, color: Colors.white, size: 40),
+                                ),
+                              ],
                             ),
                           ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 20),
-                    // ServTech text
-                    const Text(
-                      'ServTech',
-                      style: TextStyle(
-                        fontSize: 50, // Reduced from 50
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xff184c6b),
+                      const SizedBox(height: 32),
+
+                      // Existing form fields
+                      buildFormField('اسم المطعم', _nameController),
+                      const SizedBox(height: 16),
+                      buildFormField('السعر', _priceController),
+                      const SizedBox(height: 16),
+                      buildFormField('الموقع', _locationController),
+                      const SizedBox(height: 16),
+                      buildFormField('الوصف', _descriptionController, maxLines: 5),
+                      const SizedBox(height: 32),
+
+                      // Submit Button
+                      SizedBox(
+                        width: double.infinity,
+                        height: 55,
+                        child: ElevatedButton(
+                          onPressed: _isLoading ? null : _submitRestaurant,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xffc29424),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                          ),
+                          child:
+                              _isLoading
+                                  ? const CircularProgressIndicator(color: Colors.white)
+                                  : const Text('اضافة', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white)),
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 20),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),
-          ),
-          Positioned(
-            top: 40,
-            left: 20,
-            child: IconButton(
-              icon: const Icon(
-                Icons.arrow_back_ios,
-                color: Color(0xff184c6b),
-              ),
-              onPressed: () => Navigator.pop(context),
+            // Back Button
+            Positioned(
+              top: 40,
+              left: 20,
+              child: IconButton(icon: const Icon(Icons.arrow_back_ios, color: Color(0xff184c6b)), onPressed: () => Navigator.pop(context)),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -132,14 +163,7 @@ class _SellResState extends State<SellRes> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Color(0xff184c6b),
-          ),
-        ),
+        Text(label, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xff184c6b))),
         const SizedBox(height: 8),
         TextFormField(
           controller: controller,
@@ -148,18 +172,9 @@ class _SellResState extends State<SellRes> {
           decoration: InputDecoration(
             filled: true,
             fillColor: Colors.grey[200], // Changed to match login page
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-              borderSide: const BorderSide(color: Colors.grey, width: 1),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-              borderSide: const BorderSide(color: Colors.grey, width: 1),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-              borderSide: const BorderSide(color: Colors.grey, width: 1),
-            ),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(15), borderSide: const BorderSide(color: Colors.grey, width: 1)),
+            enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(15), borderSide: const BorderSide(color: Colors.grey, width: 1)),
+            focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(15), borderSide: const BorderSide(color: Colors.grey, width: 1)),
             contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
           ),
         ),

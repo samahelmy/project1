@@ -18,11 +18,7 @@ class AvailableRes extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Align(
                 alignment: Alignment.centerLeft,
-                child: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios),
-                  color: const Color(0xff184c6b),
-                  onPressed: () => Navigator.pop(context),
-                ),
+                child: IconButton(icon: const Icon(Icons.arrow_back_ios), color: const Color(0xff184c6b), onPressed: () => Navigator.pop(context)),
               ),
             ),
           ),
@@ -35,12 +31,11 @@ class AvailableRes extends StatelessWidget {
                   Container(
                     width: double.infinity,
                     height: 280,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('assets/ServTech.png'),
-                        fit: BoxFit.cover,
-                      ),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), spreadRadius: 1, blurRadius: 10, offset: const Offset(0, 3))],
                     ),
+                    child: AspectRatio(aspectRatio: 16 / 9, child: FittedBox(fit: BoxFit.contain, child: Image.asset('assets/ServTech.png'))),
                   ),
                   const SizedBox(height: 20),
                   Padding(
@@ -49,73 +44,35 @@ class AvailableRes extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         // Restaurant Name
-                        Text(
-                          restaurant.name,
-                          style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xff184c6b),
-                          ),
-                        ),
+                        Text(restaurant.name, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xff184c6b))),
                         const SizedBox(height: 10),
                         // Location
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Text(
-                              restaurant.location,
-                              style: const TextStyle(
-                                fontSize: 18,
-                                color: Colors.grey,
-                              ),
-                            ),
+                            Text(restaurant.location, style: const TextStyle(fontSize: 18, color: Colors.grey)),
                             const SizedBox(width: 8),
-                            const Icon(
-                              Icons.location_on,
-                              color: Colors.grey,
-                            ),
+                            const Icon(Icons.location_on, color: Colors.grey),
                           ],
                         ),
                         const SizedBox(height: 30),
                         // Description Title
-                        const Text(
-                          "الوصف",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xff184c6b),
-                          ),
-                        ),
+                        const Text("الوصف", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xff184c6b))),
                         const SizedBox(height: 10),
                         // Description Text
                         const Text(
                           "تباع وجهاً في الڤلل المعاصرة في الخالصي في الموقع، والدابر دخل مدوري مجددومخصات. خفار ضار.",
                           textAlign: TextAlign.right,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.grey,
-                            height: 1.5,
-                          ),
+                          style: TextStyle(fontSize: 16, color: Colors.grey, height: 1.5),
                         ),
                         const SizedBox(height: 30),
                         // Price Title
-                        const Text(
-                          "السعر",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xff184c6b),
-                          ),
-                        ),
+                        const Text("السعر", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xff184c6b))),
                         const SizedBox(height: 10),
                         // Price
                         Text(
-                          "البيع ${restaurant.price} ر.س",
-                          style: const TextStyle(
-                            fontSize: 18,
-                            color: Color(0xffc29424),
-                            fontWeight: FontWeight.bold,
-                          ),
+                          "البيع ${restaurant.price} ج.م",
+                          style: const TextStyle(fontSize: 18, color: Color(0xffc29424), fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 40),
                         // Contact Button - Moved here
@@ -128,18 +85,9 @@ class AvailableRes extends StatelessWidget {
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xffc29424),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                             ),
-                            child: const Text(
-                              "اتصل",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
+                            child: const Text("اتصل", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
                           ),
                         ),
                         const SizedBox(height: 20),

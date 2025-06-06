@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
+import 'splash.dart';
 import 'login.dart';
 import 'signup.dart';
+import 'homepage.dart';
 import 'models/rating_provider.dart';
+import 'firebase_options.dart';
+import 'admin/admin_dashboard.dart';
 
-void main() => runApp(MyApp());
+final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -14,31 +25,17 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => RatingProvider(),
       child: MaterialApp(
-        title: 'Three Page App',
+        title: 'ServTech',
         theme: ThemeData(primarySwatch: Colors.blue),
-        home: LoginPage(),
+        navigatorObservers: [routeObserver],
+        home: const SplashScreen(),
         routes: {
           '/signup': (context) => const SignupPage(),
-          '/main': (context) => const MainPage(),
+          '/home': (context) => const homepage(),
+          '/login': (context) => const LoginPage(),
+          '/admin': (context) => const AdminDashboard(),
         },
       ),
     );
   }
 }
-
-class MainPage extends StatefulWidget {
-  const MainPage({super.key});
-
-  @override
-  _MainPageState createState() => _MainPageState();
-}
-
-class _MainPageState extends State<MainPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      // Scaffold configuration
-    );
-  }
-}
-

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'homepage.dart';
 
 class SignupPage extends StatefulWidget {
@@ -25,12 +27,7 @@ class _SignupPageState extends State<SignupPage> {
             Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height * 0.4,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/ServTech.png'),
-                  fit: BoxFit.contain,
-                ),
-              ),
+              decoration: const BoxDecoration(image: DecorationImage(image: AssetImage('assets/ServTech.png'), fit: BoxFit.contain)),
             ),
             Padding(
               padding: const EdgeInsets.all(20.0),
@@ -45,10 +42,7 @@ class _SignupPageState extends State<SignupPage> {
                       textDirection: TextDirection.rtl,
                       decoration: InputDecoration(
                         hintText: 'الاسم الكامل',
-                        hintStyle: const TextStyle(
-                          color: Colors.grey,
-                          fontSize: 16,
-                        ),
+                        hintStyle: const TextStyle(color: Colors.grey, fontSize: 16),
                         filled: true,
                         fillColor: Colors.grey[200],
                         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -80,10 +74,7 @@ class _SignupPageState extends State<SignupPage> {
                       textDirection: TextDirection.rtl,
                       decoration: InputDecoration(
                         hintText: 'رقم الهاتف',
-                        hintStyle: const TextStyle(
-                          color: Colors.grey,
-                          fontSize: 16,
-                        ),
+                        hintStyle: const TextStyle(color: Colors.grey, fontSize: 16),
                         filled: true,
                         fillColor: Colors.grey[200],
                         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -116,10 +107,7 @@ class _SignupPageState extends State<SignupPage> {
                       textDirection: TextDirection.rtl,
                       decoration: InputDecoration(
                         hintText: 'كلمة السر',
-                        hintStyle: const TextStyle(
-                          color: Colors.grey,
-                          fontSize: 16,
-                        ),
+                        hintStyle: const TextStyle(color: Colors.grey, fontSize: 16),
                         filled: true,
                         fillColor: Colors.grey[200],
                         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -152,10 +140,7 @@ class _SignupPageState extends State<SignupPage> {
                       textDirection: TextDirection.rtl,
                       decoration: InputDecoration(
                         hintText: 'اعادة كلمة السر',
-                        hintStyle: const TextStyle(
-                          color: Colors.grey,
-                          fontSize: 16,
-                        ),
+                        hintStyle: const TextStyle(color: Colors.grey, fontSize: 16),
                         filled: true,
                         fillColor: Colors.grey[200],
                         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -187,28 +172,12 @@ class _SignupPageState extends State<SignupPage> {
                       width: MediaQuery.of(context).size.width * 0.8,
                       height: 50,
                       child: ElevatedButton(
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(builder: (context) => const homepage()),
-                            );
-                          }
-                        },
+                        onPressed: _signUp,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xffc29424),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                         ),
-                        child: const Text(
-                          "انشاء حساب",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
+                        child: const Text("انشاء حساب", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -217,12 +186,9 @@ class _SignupPageState extends State<SignupPage> {
                       children: [
                         TextButton(
                           onPressed: () {
-                            Navigator.pushReplacementNamed(context, '/');
+                            Navigator.pushReplacementNamed(context, '/login');
                           },
-                          child: const Text(
-                            'تسجيل الدخول',
-                            style: TextStyle(color: Color(0xff184c6b)),
-                          ),
+                          child: const Text('تسجيل الدخول', style: TextStyle(color: Color(0xff184c6b))),
                         ),
                         const Text("هل لديك حساب؟"),
                       ],
@@ -235,6 +201,42 @@ class _SignupPageState extends State<SignupPage> {
         ),
       ),
     );
+  }
+
+  Future<void> _signUp() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    try {
+      // Get the phone number and validate format
+      String phone = _emailController.text.trim();
+      if (!RegExp(r'^(010|011|012|015)\d{8}$').hasMatch(phone)) {
+        Fluttertoast.showToast(msg: "الرجاء إدخال رقم هاتف مصري صحيح", backgroundColor: Colors.red);
+        return;
+      }
+
+      // Encode password in base64
+      // String encodedPassword = base64.encode(utf8.encode(_passwordController.text));
+
+      // Create user document in Firestore
+      await FirebaseFirestore.instance.collection('users').doc(phone).set({
+        'name': _nameController.text.trim(),
+        'phone': phone,
+        'password': _passwordController.text,
+        'role': 'user',
+        'isPremium': true,
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+
+      Fluttertoast.showToast(msg: "تم إنشاء الحساب بنجاح", backgroundColor: Colors.green);
+
+      // Navigate to homepage
+      if (context.mounted) {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const homepage()));
+      }
+    } catch (e) {
+      Fluttertoast.showToast(msg: "حدث خطأ. الرجاء المحاولة مرة أخرى", backgroundColor: Colors.red);
+      print('Error signing up: $e');
+    }
   }
 
   @override
