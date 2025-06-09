@@ -1,1 +1,33 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"servtech-6c623","appId":"1:963382140293:android:df11e04aa7a0aec14c78ec","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"servtech-6c623","configurations":{"android":"1:963382140293:android:df11e04aa7a0aec14c78ec","ios":"1:963382140293:ios:5d5593e90f7f15ff4c78ec","macos":"1:963382140293:ios:5d5593e90f7f15ff4c78ec","web":"1:963382140293:web:e41a8f3a6d6d72124c78ec","windows":"1:963382140293:web:f107882f315ed7974c78ec"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "servtech-6c623",
+          "appId": "1:963382140293:android:df11e04aa7a0aec14c78ec",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "servtech-6c623",
+          "configurations": {
+            "android": "1:963382140293:android:df11e04aa7a0aec14c78ec",
+            "ios": "1:963382140293:ios:5d5593e90f7f15ff4c78ec",
+            "macos": "1:963382140293:ios:5d5593e90f7f15ff4c78ec",
+            "web": "1:963382140293:web:e41a8f3a6d6d72124c78ec",
+            "windows": "1:963382140293:web:f107882f315ed7974c78ec"
+          }
+        }
+      }
+    }
+  },
+  "hosting": {
+    "public": "build\\web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}

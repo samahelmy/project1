@@ -8,6 +8,7 @@ class Job {
   final List<String> requirements;
   final String company;
   final DateTime? createdAt;
+  final bool isAvailable;
 
   Job({
     required this.title,
@@ -17,6 +18,7 @@ class Job {
     this.requirements = const [],
     this.company = '',
     this.createdAt,
+    this.isAvailable = true,
   });
 
   factory Job.fromFirestore(DocumentSnapshot doc) {
@@ -43,6 +45,7 @@ class Job {
       requirements: requirementsList,
       company: data['company']?.toString() ?? '',
       createdAt: (data['createdAt'] as Timestamp?)?.toDate(),
+      isAvailable: data['isAvailable'] ?? true,
     );
   }
 
@@ -55,6 +58,7 @@ class Job {
       'requirements': requirements,
       'company': company,
       'createdAt': createdAt,
+      'isAvailable': isAvailable,
     };
   }
 }

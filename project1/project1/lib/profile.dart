@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'editprofile.dart';
 import 'opinion.dart';
+import 'screens/premium_instructions.dart'; // Update this import
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -12,11 +14,13 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   String userName = '';
+  bool isPremium = false;
 
   @override
   void initState() {
     super.initState();
     _loadUserName();
+    _loadPremiumStatus();
   }
 
   Future<void> _loadUserName() async {
@@ -24,6 +28,63 @@ class _ProfilePageState extends State<ProfilePage> {
     setState(() {
       userName = prefs.getString('name') ?? 'زائر';
     });
+  }
+
+  Future<void> _loadPremiumStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userPhone = prefs.getString('phone');
+
+    if (userPhone != null) {
+      final doc = await FirebaseFirestore.instance.collection('users').doc(userPhone).get();
+
+      if (doc.exists) {
+        setState(() {
+          isPremium = doc.data()?['isPremium'] ?? false;
+        });
+      }
+    }
+  }
+
+  Widget _buildPremiumSection() {
+    return Container(
+      margin: const EdgeInsets.only(top: 15),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.1), spreadRadius: 1, blurRadius: 3, offset: const Offset(0, 2))],
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Text(
+                isPremium ? 'أنت عميل مميز ✅' : 'أنت لست عميلًا مميزًا ❌',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: isPremium ? Colors.green : Colors.red),
+              ),
+              const SizedBox(width: 8),
+              Icon(Icons.star, color: isPremium ? const Color(0xffc29424) : Colors.grey),
+            ],
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) =>  PremiumInstructionsScreen())),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xff184c6b),
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                ),
+                child: const Text(
+                'الاشتراك في الباقة المميزة',
+                style: TextStyle(fontSize: 16, color: Colors.white),
+                ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -87,6 +148,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       const SizedBox(height: 15),
                       _buildProfileOption(context: context, icon: Icons.logout, title: 'تسجيل خروج', onTap: () => _showLogoutDialog(context)),
+                      _buildPremiumSection(), // Add this line
                     ],
                   ),
                 ),
@@ -138,7 +200,7 @@ class _ProfilePageState extends State<ProfilePage> {
               Icon(icon, color: const Color(0xff184c6b), size: 24),
               const SizedBox(width: 16),
               Expanded(child: Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Color(0xff184c6b)))),
-              const Icon(Icons.chevron_left, color: Color(0xff184c6b), size: 24),
+              const Icon(Icons.chevron_right, color: Color(0xff184c6b), size: 24),
             ],
           ),
         ),

@@ -58,6 +58,8 @@ class _SplashScreenState extends State<SplashScreen> {
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const AdminDashboard()));
       } else if (role == 'user') {
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const homepage()));
+      } else if (role == 'seller') {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const homepage()));
       } else {
         // Invalid role, clear preferences and redirect to login
         await prefs.clear();

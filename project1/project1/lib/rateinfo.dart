@@ -2,27 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'models/rating_provider.dart';
 
-class RateInfo extends StatefulWidget {
+class RateInfo extends StatelessWidget {
   final String restaurantName;
   final double rating;
+  final String address; // Add this parameter
 
   const RateInfo({
     super.key,
     required this.restaurantName,
     required this.rating,
+    required this.address, // Add this to constructor
   });
-
-  @override
-  State<RateInfo> createState() => _RateInfoState();
-}
-
-class _RateInfoState extends State<RateInfo> {
-  double _userRating = 0;
 
   @override
   Widget build(BuildContext context) {
     final ratingProvider = Provider.of<RatingProvider>(context);
-    final currentRating = _userRating > 0 ? _userRating : widget.rating; // Changed this line
+    double _userRating = 0;
+    final currentRating = _userRating > 0 ? _userRating : rating; // Changed this line
 
     return Scaffold(
       backgroundColor: const Color(0xFFF7F6F2),
@@ -47,10 +43,7 @@ class _RateInfoState extends State<RateInfo> {
                 Positioned(
                   top: 40,
                   left: 20,
-                  child: IconButton(
-                    icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-                    onPressed: () => Navigator.pop(context),
-                  ),
+                  child: IconButton(icon: const Icon(Icons.arrow_back_ios, color: Colors.white), onPressed: () => Navigator.pop(context)),
                 ),
               ],
             ),
@@ -59,60 +52,52 @@ class _RateInfoState extends State<RateInfo> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text(
-                    widget.restaurantName,
-                    style: const TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xff184c6b),
-                    ),
-                  ),
+                  Text(restaurantName, style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xff184c6b))),
                   const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
                         'التقييم الحالي: $currentRating', // Changed to use currentRating
-                        style: const TextStyle(
-                          fontSize: 18,
-                          color: Color(0xff184c6b),
-                        ),
+                        style: const TextStyle(fontSize: 18, color: Color(0xff184c6b)),
                       ),
-                      const Icon(
-                        Icons.star,
-                        color: Color(0xffc29424),
-                        size: 24,
-                      ),
+                      const Icon(Icons.star, color: Color(0xffc29424), size: 24),
                     ],
                   ),
-                  const SizedBox(height: 40),
-                  const Text(
-                    'اضف تقييمك',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xff184c6b),
+                  const SizedBox(height: 10),
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.grey.shade300),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.location_on, color: Color(0xffc29424), size: 24),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            address, // Use the address parameter here
+                            style: const TextStyle(fontSize: 16, color: Colors.black87),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+                  const SizedBox(height: 40),
+                  const Text('اضف تقييمك', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xff184c6b))),
                   const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: List.generate(5, (index) {
                       return GestureDetector(
                         onTap: () {
-                          setState(() {
-                            _userRating = index + 1;
-                          });
+                          _userRating = index + 1;
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Icon(
-                            Icons.star,
-                            size: 40,
-                            color: index < _userRating
-                                ? const Color(0xffc29424)
-                                : Colors.grey[300],
-                          ),
+                          child: Icon(Icons.star, size: 40, color: index < _userRating ? const Color(0xffc29424) : Colors.grey[300]),
                         ),
                       );
                     }),
@@ -122,35 +107,21 @@ class _RateInfoState extends State<RateInfo> {
                     width: double.infinity,
                     height: 50,
                     child: ElevatedButton(
-                      onPressed: _userRating > 0
-                          ? () {
-                              ratingProvider.updateRating(
-                                widget.restaurantName,
-                                _userRating,
-                              );
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('تم ارسال تقييمك بنجاح'),
-                                  backgroundColor: Color(0xff184c6b),
-                                ),
-                              );
-                              Navigator.pop(context);
-                            }
-                          : null,
+                      onPressed:
+                          _userRating > 0
+                              ? () {
+                                ratingProvider.updateRating(restaurantName, _userRating);
+                                ScaffoldMessenger.of(
+                                  context,
+                                ).showSnackBar(const SnackBar(content: Text('تم ارسال تقييمك بنجاح'), backgroundColor: Color(0xff184c6b)));
+                                Navigator.pop(context);
+                              }
+                              : null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xffc29424),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       ),
-                      child: const Text(
-                        'إرسال التقييم',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
+                      child: const Text('إرسال التقييم', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
                     ),
                   ),
                 ],

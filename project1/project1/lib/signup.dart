@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'homepage.dart';
 
 class SignupPage extends StatefulWidget {
@@ -16,6 +17,9 @@ class _SignupPageState extends State<SignupPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+
+  bool _isCheckingPhone = false;
+  String? _phoneError;
 
   @override
   Widget build(BuildContext context) {
@@ -90,10 +94,31 @@ class _SignupPageState extends State<SignupPage> {
                           borderRadius: BorderRadius.circular(15),
                           borderSide: const BorderSide(color: Colors.grey, width: 1),
                         ),
+                        errorText: _phoneError,
+                        suffixIcon:
+                            _isCheckingPhone
+                                ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: Padding(
+                                    padding: EdgeInsets.all(12.0),
+                                    child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xffc29424)),
+                                  ),
+                                )
+                                : null,
                       ),
+                      onChanged: (value) {
+                        // Clear error when user types
+                        if (_phoneError != null) {
+                          setState(() => _phoneError = null);
+                        }
+                      },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'نرجوا إدخال رقم الهاتف';
+                        }
+                        if (!RegExp(r'^(010|011|012|015)\d{8}$').hasMatch(value)) {
+                          return 'الرجاء إدخال رقم هاتف مصري صحيح';
                         }
                         return null;
                       },
@@ -203,39 +228,65 @@ class _SignupPageState extends State<SignupPage> {
     );
   }
 
+  // Add new method to check phone existence
+  Future<bool> _isPhoneRegistered(String phone) async {
+    final doc = await FirebaseFirestore.instance.collection('users').doc(phone).get();
+    return doc.exists;
+  }
+
+  // Update the _signUp method
   Future<void> _signUp() async {
     if (!_formKey.currentState!.validate()) return;
 
+    setState(() {
+      _isCheckingPhone = true;
+      _phoneError = null;
+    });
+
     try {
-      // Get the phone number and validate format
       String phone = _emailController.text.trim();
-      if (!RegExp(r'^(010|011|012|015)\d{8}$').hasMatch(phone)) {
-        Fluttertoast.showToast(msg: "الرجاء إدخال رقم هاتف مصري صحيح", backgroundColor: Colors.red);
+
+      // Check if phone exists
+      final phoneExists = await _isPhoneRegistered(phone);
+      if (phoneExists) {
+        setState(() {
+          _phoneError = 'رقم الهاتف مسجل بالفعل. الرجاء استخدام رقم آخر أو تسجيل الدخول';
+          _isCheckingPhone = false;
+        });
         return;
       }
 
-      // Encode password in base64
-      // String encodedPassword = base64.encode(utf8.encode(_passwordController.text));
-
-      // Create user document in Firestore
-      await FirebaseFirestore.instance.collection('users').doc(phone).set({
+      // Prepare user data
+      final userData = {
         'name': _nameController.text.trim(),
         'phone': phone,
         'password': _passwordController.text,
         'role': 'user',
         'isPremium': true,
         'createdAt': FieldValue.serverTimestamp(),
-      });
+      };
 
-      Fluttertoast.showToast(msg: "تم إنشاء الحساب بنجاح", backgroundColor: Colors.green);
+      // Create user document in Firestore
+      await FirebaseFirestore.instance.collection('users').doc(phone).set(userData);
 
-      // Navigate to homepage
-      if (context.mounted) {
+      // Save user data to SharedPreferences
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('phone', phone);
+      await prefs.setString('name', userData['name'] as String);
+      await prefs.setString('role', userData['role']as String);
+      await prefs.setBool('isPremium', userData['isPremium']as bool);
+
+      if (mounted) {
+        Fluttertoast.showToast(msg: "تم إنشاء الحساب بنجاح", backgroundColor: Colors.green);
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const homepage()));
       }
     } catch (e) {
-      Fluttertoast.showToast(msg: "حدث خطأ. الرجاء المحاولة مرة أخرى", backgroundColor: Colors.red);
+      setState(() => _phoneError = 'حدث خطأ. الرجاء المحاولة مرة أخرى');
       print('Error signing up: $e');
+    } finally {
+      if (mounted) {
+        setState(() => _isCheckingPhone = false);
+      }
     }
   }
 

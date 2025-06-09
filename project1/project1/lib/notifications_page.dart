@@ -17,6 +17,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
   void initState() {
     super.initState();
     _loadUserPhone();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _markNotificationsAsRead());
   }
 
   Future<void> _loadUserPhone() async {
@@ -24,6 +25,20 @@ class _NotificationsPageState extends State<NotificationsPage> {
     setState(() {
       userPhone = prefs.getString('phone');
     });
+  }
+
+  Future<void> _markNotificationsAsRead() async {
+    if (userPhone == null) return;
+
+    final batch = FirebaseFirestore.instance.batch();
+    final notifications =
+        await FirebaseFirestore.instance.collection('users').doc(userPhone).collection('notifications').where('isRead', isEqualTo: false).get();
+
+    for (var doc in notifications.docs) {
+      batch.update(doc.reference, {'isRead': true});
+    }
+
+    await batch.commit();
   }
 
   @override

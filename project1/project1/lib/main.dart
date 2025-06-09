@@ -11,6 +11,8 @@ import 'admin/admin_dashboard.dart';
 
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
+//flutter build web --release; firebase init hosting; firebase deploy --only hosting 
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);

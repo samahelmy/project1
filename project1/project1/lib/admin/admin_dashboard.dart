@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'users_page.dart';
 import 'content_page.dart';
+import 'seller_requests_page.dart'; // Add this import
 
 class AdminDashboard extends StatefulWidget {
   const AdminDashboard({super.key});
@@ -15,6 +16,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
   int _selectedIndex = 0;
   bool _isAdmin = false;
   bool _isLoading = true;
+  String _adminPhone = '';
 
   @override
   void initState() {
@@ -33,6 +35,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
         setState(() {
           _isAdmin = userDoc.data()?['role'] == 'admin';
           _isLoading = false;
+          _adminPhone = phone; // Store admin phone
         });
       }
 
@@ -97,10 +100,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
         ),
         body: IndexedStack(
           index: _selectedIndex,
-          children: const [
-            AdminDashboardStats(), // Add this as first tab
-            UsersPage(),
-            ContentPage(),
+          children: [
+            AdminDashboardStats(adminPhone: _adminPhone), // Pass admin phone
+            const UsersPage(),
+            const ContentPage(),
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
@@ -118,7 +121,12 @@ class _AdminDashboardState extends State<AdminDashboard> {
 }
 
 class AdminDashboardStats extends StatelessWidget {
-  const AdminDashboardStats({super.key});
+  final String adminPhone; // Add this field
+
+  const AdminDashboardStats({
+    super.key,
+    required this.adminPhone, // Add this parameter
+  });
 
   // Fetch total users count
   Stream<int> _getUserCount() {
@@ -163,6 +171,39 @@ class AdminDashboardStats extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 24),
+          StreamBuilder<QuerySnapshot>(
+            stream:
+                adminPhone.isNotEmpty
+                    ? FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(adminPhone)
+                        .collection('notifications')
+                        .where('type', isEqualTo: 'seller_request')
+                        .where('isRead', isEqualTo: false)
+                        .snapshots()
+                    : null,
+            builder: (context, snapshot) {
+              if (adminPhone.isEmpty) {
+                return const SizedBox.shrink();
+              }
+
+              final unreadCount = snapshot.hasData ? snapshot.data!.docs.length : 0;
+
+              return ListTile(
+                leading: const Icon(Icons.store, color: Color(0xff184c6b)),
+                title: const Text('طلبات البائعين', style: TextStyle(color: Color(0xff184c6b))),
+                trailing:
+                    unreadCount > 0
+                        ? Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: const BoxDecoration(color: Colors.red, shape: BoxShape.circle),
+                          child: Text(unreadCount.toString(), style: const TextStyle(color: Colors.white)),
+                        )
+                        : null,
+                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SellerRequestsPage(adminPhone: adminPhone))),
+              );
+            },
+          ),
         ],
       ),
     );

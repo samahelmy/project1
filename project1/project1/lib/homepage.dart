@@ -7,6 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'profile.dart';
 import 'login.dart';
 import 'notifications_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'widgets/notification_badge.dart';
 
 class homepage extends StatefulWidget {
   const homepage({super.key});
@@ -21,6 +23,8 @@ class _homepageState extends State<homepage> with TickerProviderStateMixin, Rout
   final List<Animation<Offset>> _slideAnimations = [];
   RouteObserver<PageRoute>? _routeObserver;
 
+  String? userPhone;
+
   Future<void> logout(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
@@ -34,9 +38,17 @@ class _homepageState extends State<homepage> with TickerProviderStateMixin, Rout
   void initState() {
     super.initState();
     _initializeAnimations();
+    _loadUserPhone();
     // Add this line to start animations after initialization
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _startStaggeredAnimations();
+    });
+  }
+
+  Future<void> _loadUserPhone() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      userPhone = prefs.getString('phone');
     });
   }
 
@@ -162,16 +174,7 @@ class _homepageState extends State<homepage> with TickerProviderStateMixin, Rout
             ),
           ),
           // Top left - Notifications icon
-          Positioned(
-            top: 40,
-            left: 20,
-            child: IconButton(
-              icon: const CircleAvatar(backgroundColor: Colors.white, child: Icon(Icons.notifications, color: Color(0xff184c6b))),
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationsPage()));
-              },
-            ),
-          ),
+          _buildNotificationIcon(),
         ],
       ),
     );
@@ -214,7 +217,7 @@ class _homepageState extends State<homepage> with TickerProviderStateMixin, Rout
             } else if (text == 'شراء وتأجير معدات الطعام') {
               Navigator.push(context, MaterialPageRoute(builder: (context) => const ResProducts()));
             } else if (text == 'التقييم') {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const Rate()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Rate()));
             }
           },
           child: Container(
@@ -287,5 +290,39 @@ class _homepageState extends State<homepage> with TickerProviderStateMixin, Rout
       default:
         return Icons.error;
     }
+  }
+
+  Widget _buildNotificationIcon() {
+    return Positioned(
+      top: 40,
+      left: 20,
+      child: StreamBuilder<QuerySnapshot>(
+        stream:
+            userPhone != null
+                ? FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(userPhone)
+                    .collection('notifications')
+                    .where('isRead', isEqualTo: false)
+                    .snapshots()
+                : null,
+        builder: (context, snapshot) {
+          final unreadCount = snapshot.hasData ? snapshot.data!.docs.length : 0;
+
+          return Stack(
+            clipBehavior: Clip.none,
+            children: [
+              IconButton(
+                icon: const CircleAvatar(backgroundColor: Colors.white, child: Icon(Icons.notifications, color: Color(0xff184c6b))),
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationsPage()));
+                },
+              ),
+              NotificationBadge(count: unreadCount),
+            ],
+          );
+        },
+      ),
+    );
   }
 }

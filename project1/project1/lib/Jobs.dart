@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:firebase_storage/firebase_storage.dart' show FirebaseStorage;
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'models/job.dart';
 import 'availablejobs.dart';
 import 'screens/add_job_screen.dart';
@@ -15,6 +17,21 @@ class Jobs extends StatefulWidget {
 }
 
 class _JobsState extends State<Jobs> {
+  String? _userRole;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserRole();
+  }
+
+  Future<void> _loadUserRole() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _userRole = prefs.getString('role');
+    });
+  }
+
   // Add this method to handle refresh
   Future<void> _handleRefresh() async {
     // Wait for a moment to show the refresh indicator
@@ -113,7 +130,9 @@ class _JobsState extends State<Jobs> {
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(10),
-                                boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.2), spreadRadius: 2, blurRadius: 5, offset: const Offset(0, 3))],
+                                boxShadow: [
+                                  BoxShadow(color: Colors.grey.withOpacity(0.2), spreadRadius: 2, blurRadius: 5, offset: const Offset(0, 3)),
+                                ],
                               ),
                               child: Row(
                                 textDirection: TextDirection.rtl,
@@ -137,7 +156,21 @@ class _JobsState extends State<Jobs> {
                                       crossAxisAlignment: CrossAxisAlignment.end,
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        Text(job.title, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xff184c6b))),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            Padding(padding: const EdgeInsets.all(9.0), child: AvailabilityBadge(isAvailable: job.isAvailable)),
+                                            const SizedBox(width: 8),
+                                            Expanded(
+                                              child: Text(
+                                                job.title,
+                                                style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xff184c6b)),
+                                                textAlign: TextAlign.end,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                         const SizedBox(height: 12),
                                         Text(job.location, style: const TextStyle(fontSize: 14, color: Color(0xffc29424))),
                                       ],
@@ -156,16 +189,16 @@ class _JobsState extends State<Jobs> {
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            await Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const AddJobScreen()),
-            );
-          },
-          backgroundColor: const Color(0xffc29424),
-          child: const Icon(Icons.add),
-        ),
+        floatingActionButton:
+            _userRole == 'seller'
+                ? FloatingActionButton(
+                  onPressed: () async {
+                    await Navigator.push(context, MaterialPageRoute(builder: (context) => const AddJobScreen()));
+                  },
+                  backgroundColor: const Color(0xffc29424),
+                  child: const Icon(Icons.add),
+                )
+                : null,
       ),
     );
   }
@@ -239,5 +272,20 @@ class _JobsState extends State<Jobs> {
         },
       );
     }
+  }
+}
+
+class AvailabilityBadge extends StatelessWidget {
+  final bool isAvailable;
+
+  const AvailabilityBadge({super.key, required this.isAvailable});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(color: isAvailable ? const Color(0xff4caf50) : const Color(0xfff44336), borderRadius: BorderRadius.circular(12)),
+      child: Text(isAvailable ? 'متاحة' : 'غير متاحة', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white)),
+    );
   }
 }

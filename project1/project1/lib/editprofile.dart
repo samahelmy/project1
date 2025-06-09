@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'dart:async';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({super.key});
@@ -19,24 +20,30 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final phoneController = TextEditingController();
   final passwordController = TextEditingController();
   final addressController = TextEditingController();
-  String selectedGender = 'ذكر';
+  String userRole = 'user'; // Default role
+
+  bool _hasRequestedSeller = false;
+  bool _agreesToTerms = false;
+  bool? _sellerRequest;
+
+  // Change late StreamSubscription to nullable
+  StreamSubscription<DocumentSnapshot>? _userSubscription;
 
   @override
   void initState() {
     super.initState();
     _loadUserData();
+    // Remove _setupUserListener() from initState
   }
 
   Future<void> _loadUserData() async {
     setState(() => isLoading = true);
 
     try {
-      // Get phone from SharedPreferences
       final prefs = await SharedPreferences.getInstance();
       userPhone = prefs.getString('phone');
 
       if (userPhone != null) {
-        // Fetch user data from Firestore
         final doc = await FirebaseFirestore.instance.collection('users').doc(userPhone).get();
 
         if (doc.exists) {
@@ -46,14 +53,43 @@ class _EditProfilePageState extends State<EditProfilePage> {
             phoneController.text = data['phone'] ?? '';
             passwordController.text = data['password'] ?? '';
             addressController.text = data['address'] ?? '';
-            selectedGender = data['gender'] ?? 'ذكر';
+            userRole = data['role'] ?? 'user';
+            _sellerRequest = data['sellerRequest'] as bool?;
           });
+
+          // Setup listener after we have the userPhone
+          _setupUserListener();
         }
       }
     } catch (e) {
       Fluttertoast.showToast(msg: 'حدث خطأ في تحميل البيانات');
     } finally {
       setState(() => isLoading = false);
+    }
+  }
+
+  void _setupUserListener() {
+    if (userPhone != null) {
+      _userSubscription = FirebaseFirestore.instance.collection('users').doc(userPhone).snapshots().listen((snapshot) {
+        if (snapshot.exists) {
+          setState(() {
+            userRole = snapshot.data()?['role'] ?? 'user';
+            _sellerRequest = snapshot.data()?['sellerRequest'] as bool?;
+          });
+        }
+      });
+    }
+  }
+
+  Future<void> _checkSellerRequest() async {
+    if (userPhone == null) return;
+
+    final doc = await FirebaseFirestore.instance.collection('users').doc(userPhone).get();
+
+    if (doc.exists) {
+      setState(() {
+        _hasRequestedSeller = doc.data()?['role'] == 'pending_seller' || doc.data()?['sellerRequest'] == true;
+      });
     }
   }
 
@@ -68,7 +104,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         'phone': phoneController.text.trim(),
         'password': passwordController.text,
         'address': addressController.text.trim(),
-        'gender': selectedGender,
+        // Remove gender field, don't update role here
         'updatedAt': FieldValue.serverTimestamp(),
       };
 
@@ -78,6 +114,160 @@ class _EditProfilePageState extends State<EditProfilePage> {
       setState(() => isEditing = false);
     } catch (e) {
       Fluttertoast.showToast(msg: 'حدث خطأ في حفظ البيانات');
+    } finally {
+      setState(() => isLoading = false);
+    }
+  }
+
+  Widget _buildSellerRequestSection() {
+    // If user is already a seller, show success message
+    if (userRole == 'seller') {
+      return Container(
+        margin: const EdgeInsets.only(top: 20),
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.1), spreadRadius: 1, blurRadius: 3, offset: const Offset(0, 2))],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: const [
+            Icon(Icons.check_circle, color: Colors.green, size: 24),
+            SizedBox(width: 10),
+            Text('أنت الآن بائع في التطبيق ✅', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xff184c6b))),
+          ],
+        ),
+      );
+    }
+
+    // If request is pending, show waiting message
+    if (_sellerRequest == true) {
+      return Container(
+        margin: const EdgeInsets.only(top: 20),
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.1), spreadRadius: 1, blurRadius: 3, offset: const Offset(0, 2))],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: const [
+            Icon(Icons.hourglass_bottom, color: Color(0xffc29424), size: 24),
+            SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                'طلبك قيد التنفيذ، يرجى الانتظار حتى تتم مراجعته من قبل الإدارة',
+                textAlign: TextAlign.right,
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xff184c6b)),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    // Show request UI for regular users
+    return Container(
+      margin: const EdgeInsets.only(top: 20),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.1), spreadRadius: 1, blurRadius: 3, offset: const Offset(0, 2))],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          const Text('هل ترغب في أن تصبح بائعًا في التطبيق؟', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xff184c6b))),
+          const SizedBox(height: 20),
+          ...[
+                // Requirements list
+                'يجب أن يكون الحساب موثقًا باسم ورقم هاتف صحيح.',
+                'الالتزام بإدخال بيانات المنتجات بدقة.',
+                'الالتزام بسياسات المنصة والتعامل مع العملاء باحترام.',
+              ]
+              .map(
+                (requirement) => Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: Row(
+                    textDirection: TextDirection.rtl,
+                    children: [
+                      const Icon(Icons.check_circle, color: Color(0xffc29424), size: 20),
+                      const SizedBox(width: 8),
+                      Expanded(child: Text(requirement, textDirection: TextDirection.rtl, style: const TextStyle(fontSize: 16))),
+                    ],
+                  ),
+                ),
+              )
+              .toList(),
+          const SizedBox(height: 20),
+          CheckboxListTile(
+            value: _agreesToTerms,
+            onChanged: (value) => setState(() => _agreesToTerms = value!),
+            title: const Text('أوافق على الشروط', textAlign: TextAlign.end, style: TextStyle(fontSize: 16)),
+            controlAffinity: ListTileControlAffinity.leading,
+            activeColor: const Color(0xffc29424),
+          ),
+          const SizedBox(height: 20),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: _agreesToTerms ? _submitSellerRequest : null,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xff184c6b),
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              ),
+              child: const Text('تقديم الطلب', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _submitSellerRequest() async {
+    if (userPhone == null) return;
+    setState(() => isLoading = true);
+
+    try {
+      // Update user document
+      await FirebaseFirestore.instance.collection('users').doc(userPhone).update({
+        'sellerRequest': true,
+        'requestedAt': FieldValue.serverTimestamp(),
+      });
+
+      // Add notification for the user
+      await FirebaseFirestore.instance.collection('users').doc(userPhone).collection('notifications').add({
+        'title': 'طلب بائع',
+        'message': 'تم استلام طلبك، سيتم مراجعته من قبل فريق الإشراف',
+        'timestamp': FieldValue.serverTimestamp(),
+        'isRead': false,
+      });
+
+      // Notify admins
+      final adminsSnapshot = await FirebaseFirestore.instance.collection('users').where('role', isEqualTo: 'admin').get();
+
+      for (var adminDoc in adminsSnapshot.docs) {
+        await adminDoc.reference.collection('notifications').add({
+          'title': 'طلب جديد ليصبح بائعًا',
+          'message': '''قام المستخدم التالي بطلب أن يصبح بائعًا:
+الاسم: ${nameController.text}
+الرقم: ${phoneController.text}
+العنوان: ${addressController.text}''',
+          'timestamp': FieldValue.serverTimestamp(),
+          'isRead': false,
+          'type': 'seller_request',
+          'requesterId': userPhone,
+        });
+      }
+
+      setState(() => _sellerRequest = true);
+      Fluttertoast.showToast(msg: 'تم إرسال طلبك بنجاح');
+    } catch (e) {
+      Fluttertoast.showToast(msg: 'حدث خطأ في إرسال الطلب');
     } finally {
       setState(() => isLoading = false);
     }
@@ -120,10 +310,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         const SizedBox(height: 20),
                         buildEditableRow('العنوان', addressController),
                         const SizedBox(height: 20),
-                        buildGenderSelector(),
+                        buildRoleDisplay(), // Replace buildGenderSelector with buildRoleDisplay
                       ],
                     ),
                   ),
+                  _buildSellerRequestSection(), // Add this line
                 ],
               ),
             ),
@@ -189,36 +380,25 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  Widget buildGenderSelector() {
+  Widget buildRoleDisplay() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        if (isEditing)
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            decoration: BoxDecoration(color: const Color(0xFFF7F6F2), borderRadius: BorderRadius.circular(10)),
-            child: DropdownButton<String>(
-              value: selectedGender,
-              items:
-                  ['ذكر', 'انثى'].map((String value) {
-                    return DropdownMenuItem<String>(value: value, child: Text(value, style: const TextStyle(fontSize: 18, color: Color(0xff184c6b))));
-                  }).toList(),
-              onChanged: (newValue) {
-                setState(() => selectedGender = newValue!);
-              },
-              underline: Container(),
-            ),
-          )
-        else
-          Text(selectedGender, style: const TextStyle(fontSize: 18, color: Colors.black87)),
+        Text(switch (userRole) {
+          'admin' => 'مشرف',
+          'seller' => 'بائع',
+          _ => 'مستخدم',
+        }, style: const TextStyle(fontSize: 18, color: Colors.black87)),
         const SizedBox(width: 20),
-        const Text('الجنس', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xff184c6b))),
+        const Text('نوع الحساب', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xff184c6b))),
       ],
     );
   }
 
   @override
   void dispose() {
+    // Update disposal to handle nullable subscription
+    _userSubscription?.cancel();
     nameController.dispose();
     phoneController.dispose();
     passwordController.dispose();

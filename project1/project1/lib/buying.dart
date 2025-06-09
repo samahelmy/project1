@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'sellres.dart';
 import 'models/restaurant.dart';
 import 'availableres.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Buying extends StatefulWidget {
   const Buying({super.key});
@@ -12,7 +13,22 @@ class Buying extends StatefulWidget {
 }
 
 class _BuyingState extends State<Buying> {
+  // Add role state variable
+  String? _userRole;
   final _restaurantsStream = FirebaseFirestore.instance.collection('restaurants').orderBy('createdAt', descending: true).snapshots();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserRole();
+  }
+
+  Future<void> _loadUserRole() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _userRole = prefs.getString('role');
+    });
+  }
 
   Widget _buildLoadingState() {
     return const Center(child: CircularProgressIndicator(color: Color(0xff184c6b)));
@@ -129,10 +145,26 @@ class _BuyingState extends State<Buying> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF7F6F2),
+      // Conditionally show FloatingActionButton
+      floatingActionButton:
+          _userRole == 'seller'
+              ? FloatingActionButton(
+                onPressed: () async {
+                  final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => const SellRes()));
+                  if (result != null && result is Restaurant) {
+                    // Optional: Handle the result if needed
+                  }
+                },
+                backgroundColor: const Color(0xffc29424),
+                tooltip: 'إضافة منتج جديد',
+                child: const Icon(Icons.add, color: Colors.white),
+              )
+              : null,
       body: Stack(
         children: [
           Column(
             children: [
+              // Header container
               Container(
                 width: MediaQuery.of(context).size.width,
                 height: 180,
@@ -148,37 +180,7 @@ class _BuyingState extends State<Buying> {
                 ),
               ),
               const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: InkWell(
-                  onTap: () async {
-                    final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => const SellRes()));
-                    if (result != null && result is Restaurant) {
-                      setState(() {
-                        // restaurants.add(result);
-                      });
-                    }
-                  },
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.7,
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: const Color(0xffc29424),
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.2), spreadRadius: 2, blurRadius: 5, offset: const Offset(0, 3))],
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'اضافة عرض جديد',
-                        textAlign: TextAlign.right,
-                        textDirection: TextDirection.rtl,
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
+              // Title section
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Align(
@@ -186,6 +188,7 @@ class _BuyingState extends State<Buying> {
                   child: Text("مطعم للبيع", style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xff184c6b))),
                 ),
               ),
+              // Restaurant list
               Expanded(
                 child: StreamBuilder<QuerySnapshot>(
                   stream: _restaurantsStream,
@@ -212,6 +215,7 @@ class _BuyingState extends State<Buying> {
               ),
             ],
           ),
+          // Back button
           Positioned(
             top: 40,
             left: 20,

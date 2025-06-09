@@ -202,15 +202,26 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
             value: role,
             isExpanded: true,
             items:
-                ['user', 'admin'].map((String value) {
-                  return DropdownMenuItem<String>(value: value, child: Text(value == 'admin' ? 'مشرف' : 'مستخدم'));
+                ['user', 'seller', 'admin'].map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(switch (value) {
+                      'admin' => 'مشرف',
+                      'seller' => 'بائع',
+                      _ => 'مستخدم',
+                    }),
+                  );
                 }).toList(),
             onChanged: (newValue) {
               setState(() => role = newValue);
             },
           )
         else
-          Text(role == 'admin' ? 'مشرف' : 'مستخدم', style: const TextStyle(color: Colors.black87)),
+          Text(switch (role) {
+            'admin' => 'مشرف',
+            'seller' => 'بائع',
+            _ => 'مستخدم',
+          }, style: const TextStyle(color: Colors.black87)),
       ],
     );
   }
